@@ -1,0 +1,13 @@
+(defproblem smallproblem blocks
+ (
+  (block b1)
+  (cupboard c1)
+  (on-table b1) 
+ (
+  (achieve-goals
+   (
+    (b1 open) (on c1 b1) 
+   )
+  )
+ )
+)
