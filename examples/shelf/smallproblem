@@ -2,11 +2,13 @@
  (
   (block b1)
   (cupboard c1)
-  (on-table b1) 
+  (shelf s1) 
+  (on-table b1) (closed s1)
+ )
  (
   (achieve-goals
    (
-    (b1 open) (on c1 b1) 
+    (s1 open) (in c1 b1) (on s1 b1) 
    )
   )
  )
