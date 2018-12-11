@@ -18,24 +18,14 @@
                ((holding ?a)))
 
     (:operator (!openshelf ?a)
-               ()
-               ()
-               (open ?a))
+               (shelfclosed ?a)
+               (shelfclosed ?a)
+               (shelfopen ?a))
 
     (:operator (!putdown ?b)
                ()
                ((holding ?b))
                ((on-table ?b) (clear ?b)))
-
-    (:operator (!stack ?c ?d)
-               ()
-               ((holding ?c) (clear ?d))
-               ((on ?c ?d) (clear ?c)))
-
-    (:operator (!unstack ?e ?f)
-               ()
-               ((clear ?e) (on ?e ?f))
-               ((holding ?e) (clear ?f)))
 
     ;; book-keeping methods & ops, to keep track of what needs to be done
     (:operator (!!assert ?g)
