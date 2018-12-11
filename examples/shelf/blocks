@@ -18,9 +18,9 @@
                ((holding ?a)))
 
     (:operator (!openshelf ?a)
-               (shelfclosed ?a)
-               (shelfclosed ?a)
-               (shelfopen ?a))
+               ((shelfclosed ?a))
+               ((shelfclosed ?a))
+               ((shelfopen ?a)))
 
     (:operator (!putdown ?b)
                ()

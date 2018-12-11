@@ -91,3 +91,11 @@ d: src/JSHOP2/*.java
 	cd examples/madrts; javac gui.java
 	cd examples/madrts; java gui 
 	cd examples/madrts; rm madrts.java; rm madrts.txt; rm problem.java; rm *.class
+
+12: bin.build/JSHOP2.jar
+	cd examples/shelf; java JSHOP2.InternalDomain blocks
+	cd examples/shelf; java JSHOP2.InternalDomain -ra smallproblem
+	cd examples/shelf; javac smallgui.java
+	cd examples/shelf; java smallgui
+	cd examples/shelf; rm blocks.java; rm blocks.txt; rm smallproblem.java; rm *.class
+
