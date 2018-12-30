@@ -24,21 +24,21 @@ public class problem1
 	}
 
 	private static void createState0(State s)	{
-		s.add(new Predicate(1, 0, new TermList(TermConstant.getConstant(7), TermList.NIL)));
-		s.add(new Predicate(3, 0, new TermList(TermConstant.getConstant(11), TermList.NIL)));
-		s.add(new Predicate(6, 0, new TermList(TermConstant.getConstant(17), new TermList(TermConstant.getConstant(15), TermList.NIL))));
+		s.add(new Predicate(1, 0, new TermList(TermConstant.getConstant(8), TermList.NIL)));
+		s.add(new Predicate(3, 0, new TermList(TermConstant.getConstant(12), TermList.NIL)));
+		s.add(new Predicate(5, 0, new TermList(TermConstant.getConstant(18), new TermList(TermConstant.getConstant(16), TermList.NIL))));
 	}
 
 	public static LinkedList<Plan> getPlans()
 	{
 		LinkedList<Plan> returnedPlans = new LinkedList<Plan>();
-		TermConstant.initialize(19);
+		TermConstant.initialize(20);
 
 		Domain d = new storegroceries();
 
 		d.setProblemConstants(defineConstants());
 
-		State s = new State(7, d.getAxioms());
+		State s = new State(8, d.getAxioms());
 
 		JSHOP2.initialize(d, s);
 
@@ -48,7 +48,7 @@ public class problem1
 		createState0(s);
 
 		tl = new TaskList(1, true);
-		tl.subtasks[0] = new TaskList(new TaskAtom(new Predicate(0, 0, new TermList(TermConstant.getConstant(7), new TermList(TermConstant.getConstant(15), new TermList(TermConstant.getConstant(9), TermList.NIL)))), false, false));
+		tl.subtasks[0] = new TaskList(new TaskAtom(new Predicate(0, 0, new TermList(TermConstant.getConstant(8), new TermList(TermConstant.getConstant(16), new TermList(TermConstant.getConstant(10), new TermList(TermConstant.getConstant(14), TermList.NIL))))), false, false));
 
 		thread = new SolverThread(tl, 2147483647);
 		thread.start();

@@ -1,0 +1,13 @@
+(defproblem problem1 storegroceries
+    ;;Case1
+     (
+      (object a1)
+      (cupboard c1)
+      (door d1)
+      (shelf s1)
+      (table t1)
+      (robot r1)
+      (on a1 t1) (door-closed d1)(robot-at r1 t1)
+     )
+     ((move-known-object a1 t1 c1 s1))
+)

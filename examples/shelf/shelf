@@ -34,12 +34,12 @@
 
 (defdomain storegroceries
   (
-    ;; basic store-groceries operators
+    ;; store-groceries operators
 
-    ;; To pickup an object from the table
-    (:operator (!pickup ?a)
+    ;; To pickup an object ?a from a surface (for our domain, the surface is either a shelf of a tray)
+    (:operator (!pickup ?a ?s)
             ()
-            ((clear ?a) (on-table ?a))
+            ((clear ?a) (on ?a ?s))
             ((holding ?a)))
 
     ;; To open the cupboard door
@@ -48,11 +48,11 @@
             ((door-closed ?d))
             ((door-open ?d)))
 
-    ;; To putdown an object on a shelf
-    (:operator (!putdown ?a)
+    ;; To putdown an object on a surface (for our domain, the surface is either a shelf of a tray)
+    (:operator (!putdown ?a ?s)
             ()
             ((holding ?a))
-            ((on-shelf ?a) (clear ?a)))
+            ((on ?a ?s) (clear ?a)))
 
     ;; To move the robot ?r from location ?x to location ?y
     (:operator (!move ?r ?x ?y)
@@ -60,17 +60,56 @@
             ((robot-at ?r ?x))
             ((robot-at ?r ?y)))
 
-    ;; Add operator to place the object in the tray(so that the robot can carry more than one object at a time)
+    ;; To locate an object
+    (:operator (!locate ?a)
+            ((unknown-location ?a))
+            ((unknown-location ?a))
+            ((known-location ?a)))
 
+    ;; store-groceries methods
 
-    ;; The method to move object ?a from the table ?t to the cupboard ?c
-    (:method (move-object ?a ?t ?c)
+    ;; To move object ?a from the table ?t to the cupboard ?c and place it on shelf ?s
+    (:method (move-known-object ?a ?t ?c ?s)
             branch1
-            ((robot-at ?r ?t)(on-table ?a)(door-open ?d))
-            ((!pickup ?a)(!move ?r ?t ?c)(!putdown ?a))
+            ((robot-at ?r ?t)(on ?a ?t)(door-open ?d))
+            ((!pickup ?a ?t)(!move ?r ?t ?c)(!putdown ?a ?s))
             branch2
-            ((robot-at ?r ?t)(on-table ?a)(door-closed ?d))
-            ((!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(!pickup ?a)(!move ?r ?t ?c)(!putdown ?a)))
+            ((robot-at ?r ?t)(on ?a ?t)(door-closed ?d))
+            ((!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(!pickup ?a ?t)(!move ?r ?t ?c)(!putdown ?a ?s)))
+
+    ;; To locate the table and the cupboard
+
+    ;; To perceive the objects
+
+    ;; To move objects from the table ?t to the cupboard ?c and place them on shelf ?s, using a ?tray
+    (:method (move-known-objects ?t ?c ?s ?tray)
+            branch1
+            ((robot-at ?r ?t)(door-open ?d))
+            ((load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
+            branch2
+            ((robot-at ?r ?t)(door-closed ?d))
+            ((!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
+            )
+
+    ;; To place objects on the tray ?tray (so that the robot can carry more than one object at a time). The objects are picked up from the table ?t
+    (:method (load-tray ?tray ?t)
+            branch1
+            ((on ?a ?t))
+            ((!pickup ?a ?t)(!putdown ?a ?tray))
+            branch2
+            ((not (on ?a ?t)))
+            ()  ;do nothing (we are done loading objects)
+    )
+
+    ;; To place all the object from the tray ?tray on the shelf ?s
+    (:method (unload-tray ?tray ?s)
+            branch1
+            ((on ?a ?tray))
+            ((!pickup ?a ?tray)(!putdown ?a ?s))
+            branch2
+            ((not (on ?a ?tray)))
+            ()  ;do nothing (we are done unloading objects)
+    )
 
     )
 )
