@@ -78,37 +78,48 @@
             ((!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(!pickup ?a ?t)(!move ?r ?t ?c)(!putdown ?a ?s)))
 
     ;; To locate the table and the cupboard
+    (:method (locate-table-and-cupboard ?t ?c)
+            ()
+            ((!locate ?t)(!locate ?c))
+    )
 
     ;; To perceive the objects
 
     ;; To move objects from the table ?t to the cupboard ?c and place them on shelf ?s, using a ?tray
     (:method (move-known-objects ?t ?c ?s ?tray)
             branch1
-            ((robot-at ?r ?t)(door-open ?d))
+            ((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-open ?d))
             ((load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
             branch2
-            ((robot-at ?r ?t)(door-closed ?d))
+            ((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-closed ?d))
             ((!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
-            )
+            branch3
+            ((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-open ?d))
+            ((locate-table-and-cupboard ?t ?c)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
+            branch4
+            ((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-closed ?d))
+            ((locate-table-and-cupboard ?t ?c)(!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
+
+    )
 
     ;; To place objects on the tray ?tray (so that the robot can carry more than one object at a time). The objects are picked up from the table ?t
     (:method (load-tray ?tray ?t)
             branch1
             ((on ?a ?t))
-            ((!pickup ?a ?t)(!putdown ?a ?tray))
+            ((!pickup ?a ?t)(!putdown ?a ?tray)(load-tray ?tray ?t))
             branch2
             ((not (on ?a ?t)))
-            ()  ;do nothing (we are done loading objects)
+            nil  ;do nothing (we are done loading objects)
     )
 
     ;; To place all the object from the tray ?tray on the shelf ?s
     (:method (unload-tray ?tray ?s)
             branch1
             ((on ?a ?tray))
-            ((!pickup ?a ?tray)(!putdown ?a ?s))
+            ((!pickup ?a ?tray)(!putdown ?a ?s)(unload-tray ?tray ?s))
             branch2
             ((not (on ?a ?tray)))
-            ()  ;do nothing (we are done unloading objects)
+            nil  ;do nothing (we are done unloading objects)
     )
 
     )
