@@ -3,7 +3,7 @@ import java.util.*;
 
 public class smallgui{
 	public static void main(String[] args) {
-		smallproblem.getPlans();
+		problem1.getPlans();
 		new JSHOP2GUI();
-	} 
+	}
 }

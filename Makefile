@@ -89,7 +89,7 @@ d: src/JSHOP2/*.java
 	cd examples/madrts; java JSHOP2.InternalDomain madrts
 	cd examples/madrts; java JSHOP2.InternalDomain -ra problem
 	cd examples/madrts; javac gui.java
-	cd examples/madrts; java gui 
+	cd examples/madrts; java gui
 	cd examples/madrts; rm madrts.java; rm madrts.txt; rm problem.java; rm *.class
 
 12: bin.build/JSHOP2.jar
@@ -97,5 +97,4 @@ d: src/JSHOP2/*.java
 	cd examples/shelf; java JSHOP2.InternalDomain -ra problem
 	cd examples/shelf; javac smallgui.java
 	cd examples/shelf; java smallgui
-	cd examples/shelf; rm blocks.java; rm blocks.txt; rm smallproblem.java; rm *.class
-
+	cd examples/shelf; rm shelf.java; rm shelf.txt; rm smallproblem.java; rm *.class
