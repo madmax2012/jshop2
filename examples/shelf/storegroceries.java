@@ -1570,66 +1570,6 @@ class Precondition10 extends Precondition
 	}
 }
 
-class Precondition11 extends Precondition
-{
-	Precondition[] p;
-	Term[][] b;
-
-	public Precondition11(Term[] unifier)
-	{
-		p = new Precondition[3];
-		p[1] = new PreconditionAtomic(new Predicate(10, 2, new TermList(TermVariable.getVariable(1), TermList.NIL)), unifier);
-		p[2] = new PreconditionAtomic(new Predicate(9, 2, new TermList(TermVariable.getVariable(1), TermList.NIL)), unifier);
-		b = new Term[3][];
-		b[0] = unifier;
-		b[0] = Term.merge( b, 1 );
-
-		setFirst(false);
-	}
-
-	public void bind(Term[] binding)
-	{
-		b[0] = binding;
-		b[0] = Term.merge( b, 1 );
-		p[1].bind(binding);
-		b[1] = null;
-		b[2] = null;
-	}
-
-	protected Term[] nextBindingHelper()
-	{
-		while (b[2] == null)
-		{
-			boolean b1changed = false;
-			while (b[1] == null)
-			{
-				b[1] = p[1].nextBinding();
-				if (b[1] == null)
-					return null;
-				b1changed = true;
-			}
-			if ( b1changed ) {
-				p[2].reset();
-				p[2].bind(Term.merge(b, 2));
-			}
-			b[2] = p[2].nextBinding();
-			if (b[2] == null) b[1] = null;
-		}
-
-		Term[] retVal = Term.merge(b, 3);
-		b[2] = null;
-		return retVal;
-	}
-
-	protected void resetHelper()
-	{
-		p[1].reset();
-		p[2].reset();
-		b[1] = null;
-		b[2] = null;
-	}
-}
-
 class Method6 extends Method
 {
 	public Method6()
@@ -1637,13 +1577,13 @@ class Method6 extends Method
 		super(new Predicate(5, 2, new TermList(TermVariable.getVariable(0), TermList.NIL)));
 		TaskList[] subsIn = new TaskList[2];
 
-		subsIn[0] = createTaskList0();
-		subsIn[1] = TaskList.empty;
+		subsIn[0] = TaskList.empty;
+		subsIn[1] = createTaskList1();
 
 		setSubs(subsIn);
 	}
 
-	TaskList createTaskList0()
+	TaskList createTaskList1()
 	{
 		TaskList retVal;
 
@@ -1661,10 +1601,10 @@ class Method6 extends Method
 		switch (which)
 		{
 			case 0:
-				p = (new Precondition10(unifier)).setComparator(null);
+				p = (new PreconditionForAll(new PreconditionAtomic(new Predicate(10, 2, new TermList(TermVariable.getVariable(1), TermList.NIL)), unifier), new PreconditionAtomic(new Predicate(9, 2, new TermList(TermVariable.getVariable(1), TermList.NIL)), unifier), 2)).setComparator(null);
 			break;
 			case 1:
-				p = (new Precondition11(unifier)).setComparator(null);
+				p = (new Precondition10(unifier)).setComparator(null);
 			break;
 			default:
 				return null;

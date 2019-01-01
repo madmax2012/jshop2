@@ -146,18 +146,14 @@
     ;; To perceive and categorize objects
     (:method (categorize ?camera)
             branch1
-            ((object ?z)(uncategorized ?z))
-            ((!perceive ?z ?camera)(categorize ?camera))
+            (forall (?z) ((object ?z))(categorized ?z))
+            nil
 
             branch2
-            ((object ?z)(categorized ?z))
-            nil
+            ((object ?z)(uncategorized ?z))
+            ((!perceive ?z ?camera)(categorize ?camera))
 
     )
 
     )
 )
-
-; axioms
-
-; (:- (categorized ?x))
