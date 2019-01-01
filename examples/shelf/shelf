@@ -66,6 +66,12 @@
             ((unknown-location ?a))
             ((known-location ?a)))
 
+    ;; To perceive an object with camera ?camera
+    (:operator (!perceive ?a ?camera)
+                ((uncategorized ?a))
+                ((uncategorized ?a))
+                ((categorized ?a)(:protection(categorized ?a))))
+
     ;; store-groceries methods
 
     ;; To move object ?a from the table ?t to the cupboard ?c and place it on shelf ?s
@@ -83,8 +89,6 @@
             ((!locate ?t)(!locate ?c))
     )
 
-    ;; To perceive the objects
-
     ;; To move objects from the table ?t to the cupboard ?c and place them on shelf ?s, using a ?tray
     (:method (move-known-objects ?t ?c ?s ?tray)
             branch1
@@ -99,6 +103,23 @@
             branch4
             ((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-closed ?d))
             ((locate-table-and-cupboard ?t ?c)(!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
+
+    )
+
+    ;; To move uncategorized objects from the table ?t to the cupboard ?c and place them on shelf ?s, using a ?tray. Objects are perceived using camera ?camera
+    (:method (move-uncategorized-objects ?t ?c ?s ?tray ?camera)
+            branch1
+            ((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-open ?d))
+            ((categorize ?camera)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
+            branch2
+            ((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-closed ?d))
+            ((categorize ?camera)(!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
+            branch3
+            ((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-open ?d))
+            ((categorize ?camera)(locate-table-and-cupboard ?t ?c)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
+            branch4
+            ((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-closed ?d))
+            ((locate-table-and-cupboard ?t ?c)(categorize ?camera)(!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
 
     )
 
@@ -122,5 +143,21 @@
             nil  ;do nothing (we are done unloading objects)
     )
 
+    ;; To perceive and categorize objects
+    (:method (categorize ?camera)
+            branch1
+            ((object ?z)(uncategorized ?z))
+            ((!perceive ?z ?camera)(categorize ?camera))
+
+            branch2
+            ((object ?z)(categorized ?z))
+            nil
+
+    )
+
     )
 )
+
+; axioms
+
+; (:- (categorized ?x))
