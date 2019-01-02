@@ -83,6 +83,12 @@
                 nil
                 ((drink-label ?a)(labeled ?a)))
 
+    ;; To label an object as a fruit
+    (:operator (!label-object ?a)
+                ((is-fruit ?a))
+                nil
+                ((fruit-label ?a)(labeled ?a)))
+
     ;; To label the contents of a shelf. A shelf holds objects of one category
 
     (:operator (!label-shelf ?s)
@@ -95,6 +101,11 @@
                 nil
                 ((drink-label ?s)(labeled ?s)))
 
+    (:operator (!label-shelf ?s)
+                ((holds-fruit ?s))
+                nil
+                ((fruit-label ?s)(labeled ?s)))
+
     ;; store-groceries methods
 
     ;; To move object ?a from the table ?t to the cupboard ?c and place it on shelf ?s
@@ -102,6 +113,7 @@
             branch1
             ((robot-at ?r ?t)(on ?a ?t)(door-open ?d))
             ((!pickup ?a ?t)(!move ?r ?t ?c)(!putdown ?a ?s))
+
             branch2
             ((robot-at ?r ?t)(on ?a ?t)(door-closed ?d))
             ((!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(!pickup ?a ?t)(!move ?r ?t ?c)(!putdown ?a ?s)))
@@ -117,12 +129,15 @@
             branch1
             ((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-open ?d))
             ((load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
+
             branch2
             ((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-closed ?d))
             ((!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
+
             branch3
             ((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-open ?d))
             ((locate-table-and-cupboard ?t ?c)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
+
             branch4
             ((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-closed ?d))
             ((locate-table-and-cupboard ?t ?c)(!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
@@ -134,12 +149,15 @@
             branch1
             ((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-open ?d))
             ((categorize ?camera)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
+
             branch2
             ((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-closed ?d))
             ((categorize ?camera)(!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
+
             branch3
             ((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-open ?d))
             ((categorize ?camera)(locate-table-and-cupboard ?t ?c)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
+
             branch4
             ((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-closed ?d))
             ((locate-table-and-cupboard ?t ?c)(categorize ?camera)(!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
@@ -148,6 +166,19 @@
 
     ;; To move unlabeled objects to unknown cupboard
     (:method (move-unlabeled-object-unknown-cupboard ?t ?c ?s ?tray ?camera)
+            branch1
+            ((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-open ?d))
+            ((!move ?r ?t ?c)(explore-cupboard ?c)(!move ?r ?c ?t)(label-objects)(load-tray ?tray ?t)(!move ?r ?t ?c)(place-in-shelf ?tray))
+
+            branch2
+            ((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-closed ?d))
+            ((!move ?r ?t ?c)(!open-door ?d)(explore-cupboard ?c)(!move ?r ?c ?t)(label-objects)(load-tray ?tray ?t)(!move ?r ?t ?c)(place-in-shelf ?tray))
+
+            branch3
+            ((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-open ?d))
+            ((locate-table-and-cupboard ?t ?c)(!move ?r ?t ?c)(explore-cupboard ?c)(!move ?r ?c ?t)(label-objects)(load-tray ?tray ?t)(!move ?r ?t ?c)(place-in-shelf ?tray))
+
+            branch4
             ((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-closed ?d))
             ((locate-table-and-cupboard ?t ?c)(!move ?r ?t ?c)(!open-door ?d)(explore-cupboard ?c)(!move ?r ?c ?t)(label-objects)(load-tray ?tray ?t)(!move ?r ?t ?c)(place-in-shelf ?tray))
     )
@@ -184,10 +215,15 @@
             ((on ?a ?tray)(drink-label ?a)((shelf ?z)(drink-label ?z)))
             ((!pickup ?a ?tray)(!putdown ?a ?z)(place-in-shelf ?tray))
 
+            ; If the object is a fruit, choose the shelf labeled as 'fruit-label'
+            branch3
+            ((on ?a ?tray)(fruit-label ?a)((shelf ?z)(fruit-label ?z)))
+            ((!pickup ?a ?tray)(!putdown ?a ?z)(place-in-shelf ?tray))
+
             ; If there are no more objects on the tray, do nothing
+            branch4
             ((not (on ?a ?tray)))
             nil  ;do nothing (we are done unloading objects)
-
     )
 
     ;; To perceive and categorize objects
@@ -233,6 +269,11 @@
     ; Characteristics of a drink
     (:- (is-drink ?a)
         (or (is-bottle ?a)(is-can ?a))
+        )
+
+    ; Characteristics of a fruit
+    (:- (is-fruit ?a)
+        ((is-round ?a))
         )
 
     )
