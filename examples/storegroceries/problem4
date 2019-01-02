@@ -1,0 +1,31 @@
+(defproblem problem4 storegroceries
+    ;;Case4
+     (
+      (object a1)
+      (object a2)
+      (object a3)
+      (camera camera1)
+      (cupboard c1)
+      (door d1)
+      (shelf s1)
+      (shelf s2)
+      (table t1)
+      (robot r1)
+      (tray tray1)
+
+      (unknown-location t1)(unknown-location c1)(unlabeled c1)
+      (holds-snack s1)
+      (holds-drink s2)
+      (on a1 t1)(is-bag a1)(is-crunchy a1)
+      (on a2 t1)(is-bottle a2)
+      (on a3 t1)(is-can a3)
+      (door-closed d1)(robot-at r1 t1)
+     )
+     ((move-unlabeled-object-unknown-cupboard t1 c1 s1 tray1 camera1))
+)
+
+
+;; The initial state in the problem definition contains the characteristics of ;;the objects used for classifying them (e.g. a1 is bag). This should be added ;;by the perception mechanism to the knowledge base instead of being in the ;;initial state.
+
+;; All shelves hold objects of just one type. Initially all shelves hold one object.
+;; We assume that there is only one cupboard which holds all the shelves

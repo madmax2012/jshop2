@@ -1,5 +1,5 @@
 ;;; SHOP domain representation for the storing groceries problem.
-;;; The robot picks up groceries from a table and stored them in a cupboard with 3 shelfs.
+;;; The robot picks up groceries from a table and stores them in a cupboard with 3 shelves.
 ;;; The door of the cupboard is closed at the beginning.
 ;;; The robot has a tray to carry more than one item at a time.
 
@@ -29,8 +29,7 @@
 ;; - Place each order on the correct shelf according to the category.
 
 ;;; ------------------------------------------------------------------------
-;;; Declaring the domain: operators, methods, and axioms
-;;; ------------------------------------------------------------------------
+;;; Declaring the domain: operators, methods, and axioms  ------------------------------------------------------------------------
 
 (defdomain storegroceries
   (
@@ -71,6 +70,30 @@
                 ()
                 ((uncategorized ?a))
                 ((categorized ?a)))
+
+    ;; To label an object as a snack
+    (:operator (!label-object ?a)
+                ((is-snack ?a))
+                nil
+                ((snack-label ?a)(labeled ?a)))
+
+    ;; To label an object as a drink
+    (:operator (!label-object ?a)
+                ((is-drink ?a))
+                nil
+                ((drink-label ?a)(labeled ?a)))
+
+    ;; To label the contents of a shelf. A shelf holds objects of one category
+
+    (:operator (!label-shelf ?s)
+                ((holds-snack ?s))
+                nil
+                ((snack-label ?s)(labeled ?s)))
+
+    (:operator (!label-shelf ?s)
+                ((holds-drink ?s))
+                nil
+                ((drink-label ?s)(labeled ?s)))
 
     ;; store-groceries methods
 
@@ -123,6 +146,12 @@
 
     )
 
+    ;; To move unlabeled objects to unknown cupboard
+    (:method (move-unlabeled-object-unknown-cupboard ?t ?c ?s ?tray ?camera)
+            ((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-closed ?d))
+            ((locate-table-and-cupboard ?t ?c)(!move ?r ?t ?c)(!open-door ?d)(explore-cupboard ?c)(!move ?r ?c ?t)(label-objects)(load-tray ?tray ?t)(!move ?r ?t ?c)(place-in-shelf ?tray))
+    )
+
     ;; To place objects on the tray ?tray (so that the robot can carry more than one object at a time). The objects are picked up from the table ?t
     (:method (load-tray ?tray ?t)
             branch1
@@ -143,6 +172,24 @@
             nil  ;do nothing (we are done unloading objects)
     )
 
+    ;; To place objects from the tray ?tray on the shelf that corresponds to the object category
+    (:method (place-in-shelf ?tray)
+            ; If the object is a snack, choose the shelf labeled as 'snack-label'
+            branch1
+            ((on ?a ?tray)(snack-label ?a)((shelf ?z)(snack-label ?z)))
+            ((!pickup ?a ?tray)(!putdown ?a ?z)(place-in-shelf ?tray))
+
+            ; If the object is a drink, choose the shelf labeled as 'drink-label'
+            branch2
+            ((on ?a ?tray)(drink-label ?a)((shelf ?z)(drink-label ?z)))
+            ((!pickup ?a ?tray)(!putdown ?a ?z)(place-in-shelf ?tray))
+
+            ; If there are no more objects on the tray, do nothing
+            ((not (on ?a ?tray)))
+            nil  ;do nothing (we are done unloading objects)
+
+    )
+
     ;; To perceive and categorize objects
     (:method (categorize ?camera)
             branch1
@@ -152,8 +199,41 @@
             branch2
             ((object ?z)(uncategorized ?z))
             ((!perceive ?z ?camera)(categorize ?camera))
-
     )
+
+    ;; To label the objects
+    (:method (label-objects)
+            branch1
+            (forall (?z) ((object ?z))(labeled ?z))
+            nil
+
+            branch2
+            ((object ?z)(not (labeled ?z)))
+            ((!label-object ?z)(label-objects))
+    )
+
+    ;; To explore the shelves of the cupboard ?c
+    (:method (explore-cupboard ?c)
+            branch1
+            (forall (?z) ((shelf ?z))(labeled ?z))
+            nil
+
+            branch2
+            ((shelf ?z)(not (labeled ?z)))
+            ((!label-shelf ?z)(explore-cupboard ?c))
+    )
+
+    ;; axioms
+
+    ; Characteristics of a snack
+    (:- (is-snack ?a)
+        ((is-bag ?a)(is-crunchy ?a))
+        )
+
+    ; Characteristics of a drink
+    (:- (is-drink ?a)
+        (or (is-bottle ?a)(is-can ?a))
+        )
 
     )
 )
