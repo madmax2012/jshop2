@@ -1,0 +1,110 @@
+\documentclass[paper=a4, fontsize=11pt]{scrartcl}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{cite}
+
+\setlength\parindent{0pt}
+
+\title{Project: Storing Groceries @home}
+\author{\'{A}ngela Patricia Enr\'{i}quez G\'{o}mez \\
+	Ethan Massey \\
+	Maximilian Messing}
+
+\begin{document}
+	
+	\maketitle 
+	
+ 	\section{Introduction} 
+ 	
+ 	This project creates plans for the storing groceries tasks in the context of RoboCup @home. It uses the java version of the SHOP2 HTN Planner. \\
+ 	
+ 	The robot picks up groceries from a table and stores them in a cupboard with 3 shelves. The door of the cupboard is closed at the beginning.
+ 	and the robot has a tray to carry more than one item at a time.
+ 	
+ 	\section{Selection of the Planner}
+ 
+ 	SHOP2 (Simple Hierarchical Ordered Planner) is an HTN Planner that uses partial-order forward decomposition. SHOP2 does not require methods to be totally ordered, i.e., the subtasks of a method can have partial orders. Because of this property, SHOP2 can generate plans by interleaving tasks of different methods. Its predecessor SHOP can only handle methods with totally ordered subtasks and thus, is more limited in the plans it can generate. SHOP can overcome this limitation by adding global methods that allow to perform more general actions \cite{Nau2001}, like adding a pick-two-object method instead of just having a pick-one-object method. However, SHOP2 can interleave the tasks of two pick-one-object methods in such a way that it gives the same results as the more global method pick-two-objects \cite{slides}. \\
+ 	
+ 	With SHOP the knowledge base is easier to build, because it requires less global information. Having more compact knowledge bases makes it faster to generate them and easier to debug them \cite{Nau2001}. In addition, the methods of the SHOP planner allow to have a list of preconditions which are evaluated in order of appearance. This feature facilitates the definition of methods, since a method can achieve several decompositions based on the preconditions \cite{Nau2003}. \\
+ 	
+ 	Moreover, the SHOP2 algorithm won achieved of the top four awards in the 2002 International Planning Competition \cite{Nau2003}.
+ 	
+ 	\section{Installation}
+ 	
+ 	The java version of the SHOP2 planner is available in \url{https://github.com/mas-group/jshop2}
+ 	
+	Some challenges that we encountered in the installation of the software are ...
+	
+	\section{Solution}
+	
+	\subsection{Case 1}
+	
+	\begin{itemize}
+		\item The location of the table and the cupboard are known.
+		\item There is one known and located object on the table.
+		\item The door of the cupboard is closed.
+		\item Place the object on any shelf.
+	\end{itemize}
+	
+	\subsubsection*{Planning domain}
+	
+	\subsubsection*{Planning problem}
+	
+	\subsubsection*{Generated Plan}
+	
+	\subsection{Case 2}
+	
+	\begin{itemize}
+		\item The table and the cupboard have to be located.
+		\item The are $n$ (2 to 5) known and located objects on the table.
+		\item The door of the cupboard is closed.
+		\item Place the objects on any shelf.
+	\end{itemize}
+	
+	\subsubsection*{Planning domain}
+	
+	\subsubsection*{Planning problem}
+	
+	\subsubsection*{Generated Plan}
+	
+	\subsection{Case 3}
+	
+		\begin{itemize}
+			\item The table and the cupboard have to be located.
+			\item There are $n$ unknown objects on the table (perception has to be used)
+			\item The door of the cupboard is closed.
+			\item Place the objects on any shelf.
+		\end{itemize}
+	
+	\subsubsection*{Planning domain}
+	
+	\subsubsection*{Planning problem}
+	
+	\subsubsection*{Generated Plan}
+	
+	\subsection{Case 4}
+	
+		\begin{itemize}
+			\item The table and the cupboard have to be located.
+			\item The cupboard has to be explored. Each shelf holds object of a category.
+			\item There are $n$ unknown objects on the table (perception has to be used). Each object belongs to a certain category.
+			\item The door of the cupboard is closed.
+			\item Place each order on the correct shelf according to the category.
+		\end{itemize}
+	
+	
+	\subsubsection*{Planning domain}
+	
+	\subsubsection*{Planning problem}
+	
+	\subsubsection*{Generated Plan}
+	 
+	  
+ 	
+
+	
+	\bibliography{bibliography}{}
+	\bibliographystyle{plain}
+	
+	
+\end{document}
