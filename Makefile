@@ -92,9 +92,30 @@ d: src/JSHOP2/*.java
 	cd examples/madrts; java gui
 	cd examples/madrts; rm madrts.java; rm madrts.txt; rm problem.java; rm *.class
 
-12: bin.build/JSHOP2.jar
-	cd examples/shelf; java JSHOP2.InternalDomain shelf
-	cd examples/shelf; java JSHOP2.InternalDomain -ra problem
-	cd examples/shelf; javac smallgui.java
-	cd examples/shelf; java smallgui
-	cd examples/shelf; rm shelf.java; rm shelf.txt; rm smallproblem.java; rm *.class
+problem1: bin.build/JSHOP2.jar
+	cd examples/storegroceries; java JSHOP2.InternalDomain storegroceries
+	cd examples/storegroceries; java JSHOP2.InternalDomain -ra problem1
+	cd examples/storegroceries; javac gui1.java
+	cd examples/storegroceries; java gui1
+	cd examples/storegroceries; rm problem1.java; rm storegroceries.txt; rm storegroceries.java; rm *.class
+
+problem2: bin.build/JSHOP2.jar
+	cd examples/storegroceries; java JSHOP2.InternalDomain storegroceries
+	cd examples/storegroceries; java JSHOP2.InternalDomain -ra problem2
+	cd examples/storegroceries; javac gui2.java
+	cd examples/storegroceries; java gui2
+	cd examples/storegroceries; rm problem*.java; rm storegroceries.txt; rm storegroceries.java; rm *.class
+
+problem3: bin.build/JSHOP2.jar
+	cd examples/storegroceries; java JSHOP2.InternalDomain storegroceries
+	cd examples/storegroceries; java JSHOP2.InternalDomain -ra problem3
+	cd examples/storegroceries; javac gui3.java
+	cd examples/storegroceries; java gui3
+	cd examples/storegroceries; rm problem*.java; rm storegroceries.txt; rm storegroceries.java; rm *.class
+
+problem4: bin.build/JSHOP2.jar
+	cd examples/storegroceries; java JSHOP2.InternalDomain storegroceries
+	cd examples/storegroceries; java JSHOP2.InternalDomain -ra problem4
+	cd examples/storegroceries; javac gui4.java
+	cd examples/storegroceries; java gui4
+	cd examples/storegroceries; rm problem*.java; rm storegroceries.txt; rm storegroceries.java; rm *.class
