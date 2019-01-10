@@ -13,7 +13,7 @@
       (table t1)
       (robot r1)
       (tray tray1)
-      (unknown-location t1)(unknown-location c1)(on a1 t1)(on a2 t1)(on a3 t1)(on a4 t1)(uncategorized a1)(uncategorized a2)(uncategorized a3)(uncategorized a4)(uncategorized a5)(door-closed d1)(robot-at r1 t1)
+      (unknown-location t1)(unknown-location c1)(on a1 t1)(on a2 t1)(on a3 t1)(on a4 t1)(on a5 t1)(uncategorized a1)(uncategorized a2)(uncategorized a3)(uncategorized a4)(uncategorized a5)(door-closed d1)(robot-at r1 t1)
      )
      ((move-uncategorized-objects t1 c1 s1 tray1 camera1))
 )
