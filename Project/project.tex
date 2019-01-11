@@ -91,7 +91,7 @@
 	\label{table:compund-tasks}
 	\end{table}
 	
-	\subsubsection*{Assumptions:}
+	\subsubsection*{Assumptions:} \label{sec:assumptions}
 	
 	The following assumptions were made when writing the domain:
 	
@@ -839,9 +839,7 @@ The plan is generated in 72 steps and consists of 21 primitive tasks: \\
 	\label{fig:problem4_gui}
 	\end{figure}
 	
-	% TODO
-	
-	Table compares the number of steps for generating plans for problems 2, 3 and 4 and the number of tasks in the plan, when the number of objects is 2, 3, 4 and 5.
+	Table \ref{table:n-objects} compares the number of steps for generating plans for problems 2, 3 and 4 and the number of tasks in the plan, when the number of objects is 2, 3, 4 and 5.
 	
 	
 	\begin{table}[h!]
@@ -854,22 +852,61 @@ The plan is generated in 72 steps and consists of 21 primitive tasks: \\
 		Problem & Objects & Steps  & Primitive tasks\\
 		\midrule
 		
-		
-		2 & {} & {} & {} \\
-		
-		
+		 \multirow{3}{*}[-3pt]{2} & {2} & {46} & {14} \\
+		 
+		 {} & {3} & {58} & {18} \\
+		 
+		 {} & {4} & {70} & {22} \\
+		 
+		 {} & {5} & {82} & {26} \\
+		 
+		 \midrule
+		 
+		 \multirow{3}{*}[-3pt]{3} & {2} & {56} & {16} \\
+		 
+		 {} & {3} & {72} & {21} \\
+		 
+		 {} & {4} & {88} & {26} \\
+		 
+		 {} & {5} & {104} & {31} \\
+		 
+		 \midrule
+		 
+		 \multirow{3}{*}[-3pt]{4} & {2} & {70} & {19} \\
+		 
+		 {} & {3} & {86} & {24} \\
+		 
+		 {} & {4} & {102} & {29} \\
+		 
+		 {} & {5} & {118} & {34} \\
+	
 		\bottomrule
 	\end{tabular}
-	\caption{Number of steps and tasks for plans with $n$ objects} 
+	\caption{Number of steps and tasks for plans with $n$ objects.} 
 	\label{table:n-objects}
 	\end{table}
 	
 	% TODO
 
 	\section{Limitations and Planning Failures} \label{sec:limitations}
+	
+	The planner will fail if the initial state does not fulfill the assumptions described in section \ref{sec:assumptions}. Here we present some examples where the planner fails.
+	
+	\subsection*{The planner does not have enough information for classifying an object.}
+	
+	In problem 4, one of the methods that the planner uses classifies all the objects based on their properties. The initial state includes properties for each object, like $is-round$ or $is-can$. The axioms in the problem domain are used for classifying objects. For instance, an object is classified as a bottle or as a can if it is a drink. 
+	
+	\begin{lstlisting}
+; Characteristics of a drink
+	(:- (is-drink ?a)
+	(or (is-bottle ?a)(is-can ?a))
+)
+
+	\end{lstlisting}
 
 
 	
+
 	\bibliography{bibliography}{}
 	\bibliographystyle{plain}
 	
