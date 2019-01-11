@@ -94,14 +94,14 @@ d: src/JSHOP2/*.java
 
 problem1: bin.build/JSHOP2.jar
 	cd examples/storegroceries; java JSHOP2.InternalDomain storegroceries
-	cd examples/storegroceries; java JSHOP2.InternalDomain -ra problem1
+	cd examples/storegroceries; java JSHOP2.InternalDomain -r problem1
 	cd examples/storegroceries; javac gui1.java
 	cd examples/storegroceries; java gui1
 	cd examples/storegroceries; rm problem1.java; rm storegroceries.txt; rm storegroceries.java; rm *.class
 
 problem2: bin.build/JSHOP2.jar
 	cd examples/storegroceries; java JSHOP2.InternalDomain storegroceries
-	cd examples/storegroceries; java JSHOP2.InternalDomain -ra problem2
+	cd examples/storegroceries; java JSHOP2.InternalDomain -r problem2
 	cd examples/storegroceries; javac gui2.java
 	cd examples/storegroceries; java gui2
 	cd examples/storegroceries; rm problem*.java; rm storegroceries.txt; rm storegroceries.java; rm *.class
