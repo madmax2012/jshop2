@@ -1,5 +1,5 @@
 (defproblem problem2 storegroceries
-    ;;Case2
+    ;;Problem2
      (
       (object a1)
       (object a2)
