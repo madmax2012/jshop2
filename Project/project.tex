@@ -363,7 +363,7 @@
 	
 	\subsection{Defining the problem}
 	
-	A problem file is created for each of the problems to solve. The problem files contain the initial state and the task that the planner has to achieve for solving each problem. The HTN planner uses this information to create a plan based on the domain information. 
+	A problem file is created for each of the problems. The problem files contain the initial state and the task that the planner has to achieve for solving each problem. The HTN planner uses this information to create a plan based on the domain information. 
 	
 
 	\subsection{Problem 1}
@@ -421,7 +421,7 @@
 	
 	\subsubsection*{Planning problem}
 	
-	The problem for 5 objects is represented as:
+	The problem for 5 objects is represented as: \\
 	
 	\begin{lstlisting}
 (defproblem problem2 storegroceries
@@ -477,9 +477,11 @@
 	[ 24 ]    (!putdown a4 s1)
 	[ 25 ]    (!pickup a5 tray1)
 	[ 26 ]    (!putdown a5 s1)
-	\end{lstlisting}
+	\end{lstlisting} 
 	
-	For testing with less objects, the planning problem has to define less objects in the initial state. For instance, for 3 objects, the planning problem is: 
+	\newpage
+	
+	For testing with less objects, the planning problem has to define less objects in the initial state. For instance, for 3 objects, the planning problem is: \\
 	
 	\begin{lstlisting}
 (defproblem problem2 storegroceries
@@ -500,7 +502,7 @@
 )
 	\end{lstlisting}
 	
-	The plan is generated in 58 steps and consists of 18 primitive tasks:
+	The plan is generated in 58 steps and consists of 18 primitive tasks: \\
 	
 	\begin{lstlisting}
 	[ 1 ]    (!locate t1)
@@ -534,7 +536,7 @@
 	
 	\subsubsection*{Planning problem}
 	
-	The problem for 5 objects is represented as:
+	The problem for 5 objects is represented as: \\
 	
 	\begin{lstlisting}
 (defproblem problem3 storegroceries
@@ -598,8 +600,57 @@
 [ 31 ]    (!putdown a5 s1)
 	\end{lstlisting}
 	
-For testing with less objects, the planning problem has to define less objects in the initial state. For instance, for 3 objects, the planning problem is: 
+\vspace{5mm}
+	
+For testing with less objects, the planning problem has to define less objects in the initial state. For instance, for 3 objects, the planning problem is: \\
 
+\begin{lstlisting}
+(defproblem problem3 storegroceries
+	;;Problem3
+	(
+		(object a1)
+		(object a2)
+		(object a3)
+		(camera camera1)
+		(cupboard c1)
+		(door d1)
+		(shelf s1)
+		(table t1)
+		(robot r1)
+		(tray tray1)
+		(unknown-location t1)(unknown-location c1)(on a1 t1)(on a2 t1)(on a3 t1)(uncategorized a1)(uncategorized a2)(uncategorized a3)(door-closed d1)(robot-at r1 t1)
+	)
+	((move-uncategorized-objects t1 c1 s1 tray1 camera1))
+)
+\end{lstlisting}
+
+\vspace{5mm}
+
+The plan is generated in 72 steps and consists of 21 primitive tasks: \\
+
+\begin{lstlisting}
+[ 1 ]    (!locate t1)
+[ 2 ]    (!locate c1)
+[ 3 ]    (!perceive a1 camera1)
+[ 4 ]    (!perceive a2 camera1)
+[ 5 ]    (!perceive a3 camera1)
+[ 6 ]    (!move r1 t1 c1)
+[ 7 ]    (!open-door d1)
+[ 8 ]    (!move r1 c1 t1)
+[ 9 ]    (!pickup a1 t1)
+[ 10 ]    (!putdown a1 tray1)
+[ 11 ]    (!pickup a2 t1)
+[ 12 ]    (!putdown a2 tray1)
+[ 13 ]    (!pickup a3 t1)
+[ 14 ]    (!putdown a3 tray1)
+[ 15 ]    (!move r1 t1 c1)
+[ 16 ]    (!pickup a1 tray1)
+[ 17 ]    (!putdown a1 s1)
+[ 18 ]    (!pickup a2 tray1)
+[ 19 ]    (!putdown a2 s1)
+[ 20 ]    (!pickup a3 tray1)
+[ 21 ]    (!putdown a3 s1)
+\end{lstlisting}
 		
 	
 	\subsection{Problem 4}
@@ -607,12 +658,14 @@ For testing with less objects, the planning problem has to define less objects i
 		\begin{itemize}
 			\item The table and the cupboard have to be located.
 			\item The cupboard has to be explored. Each shelf holds object of a category.
-			\item There are $n$ unknown objects on the table (perception has to be used). Each object belongs to a certain category.
+			\item There are $n$ (2 to 5) unknown objects on the table (perception has to be used). Each object belongs to a certain category.
 			\item The door of the cupboard is closed.
 			\item Place each order on the correct shelf according to the category.
 		\end{itemize}
 	
 	\subsubsection*{Planning problem}
+	
+	The problem for 5 objects is represented as: \\
 	
 	\begin{lstlisting}
 (defproblem problem4 storegroceries
@@ -652,7 +705,7 @@ For testing with less objects, the planning problem has to define less objects i
 	
 	To get the plan, run: \verb|make problem4| \\
 	
-	Figure \ref{fig:problem4_gui} shows that the the plan is generated in 118 steps. The task is achieved by performing a sequence of 34 primitive tasks: \\
+	Figure \ref{fig:problem4_gui} shows that the the plan for 5 objects is generated in 118 steps. The task is achieved by performing a sequence of 34 primitive tasks: \\
 	
 	\begin{lstlisting}
 [ 1 ]    (!locate t1)
@@ -692,29 +745,94 @@ For testing with less objects, the planning problem has to define less objects i
 
 	\end{lstlisting}
 	
-	\begin{figure}
+	\vspace{5mm}
+	
+	For testing with less objects, the planning problem has to define less objects in the initial state. For instance, for 3 objects, the planning problem is: \\
+	
+	\begin{lstlisting}
+(defproblem problem4 storegroceries
+	;;Problem4
+	(
+		(object a1)
+		(object a2)
+		(object a3)
+		(camera camera1)
+		(cupboard c1)
+		(door d1)
+		(shelf s1)
+		(shelf s2)
+		(shelf s3)
+		(table t1)
+		(robot r1)
+		(tray tray1)
+		
+		(unknown-location t1)(unknown-location c1)(unlabeled c1)
+		(holds-snack s1)
+		(holds-drink s2)
+		(holds-fruit s3)
+		(on a1 t1)(is-bag a1)(is-crunchy a1)
+		(on a2 t1)(is-bottle a2)
+		(on a3 t1)(is-can a3)
+		(door-closed d1)(robot-at r1 t1)
+	)
+	((move-unlabeled-object-unknown-cupboard t1 c1 s1 tray1 camera1))
+)
+	\end{lstlisting}
+	
+	\vspace{5mm}
+	
+	The plan is generated in 86 steps and consists of 24 primitive tasks: \\
+	
+\begin{lstlisting}
+[ 1 ]    (!locate t1)
+[ 2 ]    (!locate c1)
+[ 3 ]    (!move r1 t1 c1)
+[ 4 ]    (!open-door d1)
+[ 5 ]    (!label-shelf s1)
+[ 6 ]    (!label-shelf s2)
+[ 7 ]    (!label-shelf s3)
+[ 8 ]    (!move r1 c1 t1)
+[ 9 ]    (!label-object a1)
+[ 10 ]    (!label-object a2)
+[ 11 ]    (!label-object a3)
+[ 12 ]    (!pickup a1 t1)
+[ 13 ]    (!putdown a1 tray1)
+[ 14 ]    (!pickup a2 t1)
+[ 15 ]    (!putdown a2 tray1)
+[ 16 ]    (!pickup a3 t1)
+[ 17 ]    (!putdown a3 tray1)
+[ 18 ]    (!move r1 t1 c1)
+[ 19 ]    (!pickup a1 tray1)
+[ 20 ]    (!putdown a1 s1)
+[ 21 ]    (!pickup a2 tray1)
+[ 22 ]    (!putdown a2 s2)
+[ 23 ]    (!pickup a3 tray1)
+[ 24 ]    (!putdown a3 s2)
+\end{lstlisting}
+
+	
+	\begin{figure}[h!]
 		\centering
 		\includegraphics[width=1\linewidth]{images/problem1_gui}
 		\caption{GUI Problem 1 }
 		\label{fig:probem1_gui}
 	\end{figure}
 		
-	\begin{figure}
+	\begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\linewidth]{images/problem2_gui}
 	\caption{GUI Problem 2}
 	\label{fig:problem2_gui}
 	\end{figure}
 	
-	\begin{figure}
+	\begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\linewidth]{images/problem3_gui}
 	\caption{GUI Problem 3}
 	\label{fig:problem3_gui}
 	\end{figure}
 	
-	
-	\begin{figure}
+	\begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\linewidth]{images/problem4_gui}
 	\caption{GUI Problem 4}
@@ -724,6 +842,27 @@ For testing with less objects, the planning problem has to define less objects i
 	% TODO
 	
 	Table compares the number of steps for generating plans for problems 2, 3 and 4 and the number of tasks in the plan, when the number of objects is 2, 3, 4 and 5.
+	
+	
+	\begin{table}[h!]
+	
+	\centering
+	
+	\begin{tabular}{cccc}
+		\toprule   
+		
+		Problem & Objects & Steps  & Primitive tasks\\
+		\midrule
+		
+		
+		2 & {} & {} & {} \\
+		
+		
+		\bottomrule
+	\end{tabular}
+	\caption{Number of steps and tasks for plans with $n$ objects} 
+	\label{table:n-objects}
+	\end{table}
 	
 	% TODO
 
