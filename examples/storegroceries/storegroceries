@@ -3,25 +3,25 @@
 ;;; The door of the cupboard is closed at the beginning.
 ;;; The robot has a tray to carry more than one item at a time.
 
-;; Case 1:
+;; Problem 1:
 ;; - The location of the table and the cupboard are known.
 ;; - There is one known and located object on the table.
 ;; - The door of the cupboard is closed.
 ;; - Place the object on any shelf.
 
-;; Case 2:
+;; Problem 2:
 ;; - The table and the cupboard have to be located.
 ;; - The are n (2 to 5) known and located objects on the table.
 ;; - The door of the cupboard is closed.
 ;; - Place the objects on any shelf.
 
-;; Case 3:
+;; Problem 3:
 ;; - The table and the cupboard have to be located.
 ;; - There are n unknown objects on the table (perception has to be used)
 ;; - The door of the cupboard is closed.
 ;; - Place the objects on any shelf.
 
-;; Case 4:
+;; Problem 4:
 ;; - The table and the cupboard have to be located.
 ;; - The cupboard has to be explored. Each shelf holds object of a category.
 ;; - There are n unknown objects on the table (perception has to be used). Each object belongs to a certain category.
@@ -33,7 +33,7 @@
 
 (defdomain storegroceries
   (
-    ;; store-groceries operators
+    ;; ----------------store-groceries operators-----------------------
 
     ;; To pickup an object ?a from a surface (for our domain, the surface is either a shelf of a tray)
     (:operator (!pickup ?a ?s)
@@ -106,7 +106,7 @@
                 nil
                 ((fruit-label ?s)(labeled ?s)))
 
-    ;; store-groceries methods
+    ;; -----------------store-groceries methods-------------------------
 
     ;; To move object ?a from the table ?t to the cupboard ?c and place it on shelf ?s
     (:method (move-known-object ?a ?t ?c ?s)
@@ -259,7 +259,7 @@
             ((!label-shelf ?z)(explore-cupboard ?c))
     )
 
-    ;; axioms
+    ;;---------------------store-groceries axioms----------------------
 
     ; Characteristics of a snack
     (:- (is-snack ?a)
