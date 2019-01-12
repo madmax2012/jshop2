@@ -46,7 +46,7 @@
  	
  	\section{Installation}
  	
- 	The java version of the SHOP2 planner is available in \url{https://github.com/mas-group/jshop2}
+ 	The java version of the SHOP2 planner is available in \url{https://github.com/mas-group/jshop2} \\
  	
  	% TODO
  	
@@ -59,7 +59,7 @@
 	
 	We run the four problems using the same domain model. The domain includes the set of operators, methods and axioms used by the planner. We started with a smaller domain for problem 1 and added information as we worked through the rest of the problems. 
 	
-	Each problem starts with a different compound task as shown in table \ref{table:compund-tasks}.
+	Each problem starts with a different compound task as shown in Table \ref{table:compund-tasks}.
 	
 	\begin{table}[h!]
 		
@@ -87,7 +87,7 @@
 	
 		\bottomrule
 	\end{tabular}
-	\caption{Tasks to achieve from problems 1 to 4.} 
+	\caption{Tasks to achieve for problems 1 to 4.} 
 	\label{table:compund-tasks}
 	\end{table}
 	
@@ -363,7 +363,7 @@
 	
 	\subsection{Defining the problem}
 	
-	A problem file is created for each of the problems. The problem files contain the initial state and the task that the planner has to achieve for solving each problem. The HTN planner uses this information to create a plan based on the domain information. 
+	A problem file is created for each of the problems. The problem files contain the initial state and the compound task that the planner has to achieve for solving each problem. The HTN planner uses this information to create a plan based on the domain information. 
 	
 
 	\subsection{Problem 1}
@@ -421,7 +421,7 @@
 	
 	\subsubsection*{Planning problem}
 	
-	The problem for 5 objects is represented as: \\
+	The problem for 5 objects is represented as follows:
 	
 	\begin{lstlisting}
 (defproblem problem2 storegroceries
@@ -479,7 +479,8 @@
 	[ 26 ]    (!putdown a5 s1)
 	\end{lstlisting} 
 	
-	\newpage
+	\vspace{5mm}
+	
 	
 	For testing with less objects, the planning problem has to define less objects in the initial state. For instance, for 3 objects, the planning problem is: \\
 	
@@ -501,6 +502,8 @@
 	((move-known-objects t1 c1 s1 tray1))
 )
 	\end{lstlisting}
+	
+	\vspace{5mm}
 	
 	The plan is generated in 58 steps and consists of 18 primitive tasks: \\
 	
@@ -810,102 +813,419 @@ The plan is generated in 72 steps and consists of 21 primitive tasks: \\
 [ 24 ]    (!putdown a3 s2)
 \end{lstlisting}
 
+\vspace{5mm}
+
+	Table \ref{table:n-objects} compares the number of steps for generating plans for problems 2, 3 and 4 and the number of tasks in the plan, when the number of objects is 2, 3, 4 and 5.
+	
+	
+	\begin{table}[h!]
+		
+		\centering
+		
+		\begin{tabular}{cccc}
+			\toprule   
+			
+			Problem & Objects & Steps  & Primitive tasks\\
+			\midrule
+			
+			\multirow{3}{*}[-3pt]{2} & {2} & {46} & {14} \\
+			
+			{} & {3} & {58} & {18} \\
+			
+			{} & {4} & {70} & {22} \\
+			
+			{} & {5} & {82} & {26} \\
+			
+			\midrule
+			
+			\multirow{3}{*}[-3pt]{3} & {2} & {56} & {16} \\
+			
+			{} & {3} & {72} & {21} \\
+			
+			{} & {4} & {88} & {26} \\
+			
+			{} & {5} & {104} & {31} \\
+			
+			\midrule
+			
+			\multirow{3}{*}[-3pt]{4} & {2} & {70} & {19} \\
+			
+			{} & {3} & {86} & {24} \\
+			
+			{} & {4} & {102} & {29} \\
+			
+			{} & {5} & {118} & {34} \\
+			
+			\bottomrule
+		\end{tabular}
+		\caption{Number of steps and tasks for plans with $n$ objects.} 
+		\label{table:n-objects}
+	\end{table}
+
 	
 	\begin{figure}[h!]
 		\centering
-		\includegraphics[width=1\linewidth]{images/problem1_gui}
+		\includegraphics[width=0.65\linewidth]{images/problem1_gui}
 		\caption{GUI Problem 1 }
 		\label{fig:probem1_gui}
 	\end{figure}
 		
 	\begin{figure}[h!]
 	\centering
-	\includegraphics[width=1\linewidth]{images/problem2_gui}
+	\includegraphics[width=0.65\linewidth]{images/problem2_gui}
 	\caption{GUI Problem 2}
 	\label{fig:problem2_gui}
 	\end{figure}
 	
+	
 	\begin{figure}[h!]
 	\centering
-	\includegraphics[width=1\linewidth]{images/problem3_gui}
+	\includegraphics[width=0.65\linewidth]{images/problem3_gui}
 	\caption{GUI Problem 3}
 	\label{fig:problem3_gui}
 	\end{figure}
 	
 	\begin{figure}[h!]
 	\centering
-	\includegraphics[width=1\linewidth]{images/problem4_gui}
+	\includegraphics[width=0.65\linewidth]{images/problem4_gui}
 	\caption{GUI Problem 4}
 	\label{fig:problem4_gui}
 	\end{figure}
 	
-	Table \ref{table:n-objects} compares the number of steps for generating plans for problems 2, 3 and 4 and the number of tasks in the plan, when the number of objects is 2, 3, 4 and 5.
-	
-	
-	\begin{table}[h!]
-	
-	\centering
-	
-	\begin{tabular}{cccc}
-		\toprule   
-		
-		Problem & Objects & Steps  & Primitive tasks\\
-		\midrule
-		
-		 \multirow{3}{*}[-3pt]{2} & {2} & {46} & {14} \\
-		 
-		 {} & {3} & {58} & {18} \\
-		 
-		 {} & {4} & {70} & {22} \\
-		 
-		 {} & {5} & {82} & {26} \\
-		 
-		 \midrule
-		 
-		 \multirow{3}{*}[-3pt]{3} & {2} & {56} & {16} \\
-		 
-		 {} & {3} & {72} & {21} \\
-		 
-		 {} & {4} & {88} & {26} \\
-		 
-		 {} & {5} & {104} & {31} \\
-		 
-		 \midrule
-		 
-		 \multirow{3}{*}[-3pt]{4} & {2} & {70} & {19} \\
-		 
-		 {} & {3} & {86} & {24} \\
-		 
-		 {} & {4} & {102} & {29} \\
-		 
-		 {} & {5} & {118} & {34} \\
-	
-		\bottomrule
-	\end{tabular}
-	\caption{Number of steps and tasks for plans with $n$ objects.} 
-	\label{table:n-objects}
-	\end{table}
-	
-	% TODO
+
+	\newpage
 
 	\section{Limitations and Planning Failures} \label{sec:limitations}
 	
 	The planner will fail if the initial state does not fulfill the assumptions described in section \ref{sec:assumptions}. Here we present some examples where the planner fails.
 	
-	\subsection*{The planner does not have enough information for classifying an object.}
+	\subsection{The planner does not have enough information for classifying an object.}
 	
-	In problem 4, one of the methods that the planner uses classifies all the objects based on their properties. The initial state includes properties for each object, like $is-round$ or $is-can$. The axioms in the problem domain are used for classifying objects. For instance, an object is classified as a bottle or as a can if it is a drink. 
+	
+	In problem 4, the planner classifies all the objects based on their properties. The initial state includes properties for each object, like $is-round$ or $is-can$. The axioms in the problem domain are used for classifying objects. For instance, an object is classified as a drink if it is a bottle or a can. \\
 	
 	\begin{lstlisting}
 ; Characteristics of a drink
 	(:- (is-drink ?a)
 	(or (is-bottle ?a)(is-can ?a))
 )
-
 	\end{lstlisting}
-
-
 	
+	\vspace{5mm}
+	
+	The primitive task $!label-object ?a$ labels an object. If the precondition $is-drink ?a$ is met, the object is labeled as a drink. \\
+	
+	\begin{lstlisting}
+;; To label an object as a drink
+(:operator (!label-object ?a)
+	((is-drink ?a))
+	nil
+	((drink-label ?a)(labeled ?a)))
+	\end{lstlisting}
+	
+	\vspace{5mm}
+	
+	The method $label-objects$ is called recursively until all objects are labeled. \\
+	
+	\begin{lstlisting}
+ ;; To label the objects
+ (:method (label-objects)
+	 branch1
+	 (forall (?z) ((object ?z))(labeled ?z))
+	 nil
+	 
+	 branch2
+	 ((object ?z)(not (labeled ?z)))
+	 ((!label-object ?z)(label-objects))
+ )
+	\end{lstlisting}
+	
+	\vspace{5mm}
+	
+	If the information needed for classifying an object is missing from the problem definition, the object will no be classified and the planner will get stuck in the recursion of the method $label-objects$. \\
+	
+	Figure \ref{fig:failure-1} shows the output of the planner when 6 objects are in the problem definition and the information for classifying one of them is missing. The planner runs 17715 steps but fails to return a plan because the information about object $a4$ is missing. All objects should be labeled to stop the recursion. Since this condition is never met, the plan fails. \\
+	
+	The problem definition for this case is as follows: \\
+	
+	\begin{lstlisting}
+(defproblem problem4 storegroceries
+	;;Case4
+	(
+		(object a1)
+		(object a2)
+		(object a3)
+		(object a4)
+		(object a5)
+		(object a6)
+		(camera camera1)
+		(cupboard c1)
+		(door d1)
+		(shelf s1)
+		(shelf s2)
+		(shelf s3)
+		(table t1)
+		(robot r1)
+		(tray tray1)
+		
+		(unknown-location t1)(unknown-location c1)(unlabeled c1)
+		(holds-snack s1)
+		(holds-drink s2)
+		(holds-fruit s3)
+		(on a1 t1)(is-bag a1)(is-crunchy a1)
+		(on a2 t1)(is-bottle a2)
+		(on a3 t1)(is-can a3)
+		;; (on a4 t1)(is-can a4)  <- object 4 does not have complete information
+		(on a5 t1)(is-round a5)
+		(on a6 t1)(is-bag a6)(is-crunchy a6)
+		(door-closed d1)(robot-at r1 t1)
+	)
+	((move-unlabeled-object-unknown-cupboard t1 c1 s1 tray1 camera1))
+)
+	\end{lstlisting}
+	
+	\vspace{5mm}
+	
+	
+	The error message shows that the planner gets stuck in a backtracking process. \\
+	
+	\begin{lstlisting}
+Exception in thread "AWT-EventQueue-0" java.lang.ArrayIndexOutOfBoundsException: -1
+at java.util.ArrayList.elementData(ArrayList.java:422)
+at java.util.ArrayList.get(ArrayList.java:435)
+at JSHOP2.JSHOP2GUI.processBacktracking(JSHOP2GUI.java:764)
+at JSHOP2.JSHOP2GUI.runOneStep(JSHOP2GUI.java:512)
+at JSHOP2.JSHOP2GUI.access$100(JSHOP2GUI.java:16)
+...
+	\end{lstlisting}
+	
+
+
+\subsection{A shelf does not hold an object in the initial state.}
+
+In problem 4, the robot labels the shelfs based on the initial object that each shelf holds. If a shelf is empty, the robot will not be able to label it and the planner will get stuck in a recursive method. This problem is similar to the one discussed in the previous section. The method $explore-cupboard$ is called recursively until all shelfs are labeled. If the program does not have enough information for labeling all shelfs, the planner will fail. \\
+
+\begin{lstlisting}
+
+;; To explore the shelves of the cupboard ?c
+	(:method (explore-cupboard ?c)
+		branch1
+		(forall (?z) ((shelf ?z))(labeled ?z))
+		nil
+		
+		branch2
+		((shelf ?z)(not (labeled ?z)))
+		((!label-shelf ?z)(explore-cupboard ?c))
+)
+\end{lstlisting}
+
+\vspace{5mm}
+
+The problem definition for this case is as follows: \\
+
+\begin{lstlisting}
+(defproblem problem4 storegroceries
+	;;Problem4
+	(
+		(object a1)
+		(object a2)
+		(object a3)
+		(object a4)
+		(object a5)
+		(camera camera1)
+		(cupboard c1)
+		(door d1)
+		(shelf s1)
+		(shelf s2)
+		(shelf s3)
+		(table t1)
+		(robot r1)
+		(tray tray1)
+		
+		(unknown-location t1)(unknown-location c1)(unlabeled c1)
+		;;(holds-snack s1) <- Shelf 1 does not hold an object
+		(holds-drink s2)
+		(holds-fruit s3)
+		(on a1 t1)(is-bag a1)(is-crunchy a1)
+		(on a2 t1)(is-bottle a2)
+		(on a3 t1)(is-can a3)
+		(on a4 t1)(is-round a4)
+		(on a5 t1)(is-round a5)
+		(door-closed d1)(robot-at r1 t1)
+	)
+	((move-unlabeled-object-unknown-cupboard t1 c1 s1 tray1 camera1))
+)
+
+\end{lstlisting}
+
+\vspace{5mm}
+
+Figure \ref{fig:failure-2} shows that the planner fails after 60 steps.
+
+\begin{figure} [h!]
+	\centering
+	\includegraphics[width=0.65\linewidth]{images/failure-1}
+	\caption{Failure: The planner does not have enough information for classifying an object.}
+	\label{fig:failure-1}
+\end{figure}
+
+
+\begin{figure} [h!]
+	\centering
+	\includegraphics[width=0.65\linewidth]{images/failure-2}
+	\caption{Failure: A shelf does not hold an object in the initial state.}
+	\label{fig:failure-2}
+\end{figure}
+
+
+\subsection{The problem definition is compiled using the option -ra}
+
+The problem descriptions can be compiled into java using the commands \cite{Ilghami2006}: 
+
+ \begin{itemize}
+ 	\item java JSHOP2.InternalDomain -r InputFileName
+ 	\item java JSHOP2.InternalDomain -rSomeInteger InputFileName
+ 	\item java JSHOP2.InternalDomain -ra InputFileName
+ \end{itemize}
+ 
+ If the option -r is used, the planner returns the first plan that it finds, it the option -ra is used, it returns all possible plans, and if -rSomeInteger is used, it outputs SomeInteger plans for the problem. \\
+ 
+ Initially, we compiled our problem definitions using the -ra command, but found out that when more than 4 objects were included in the problem definition, the planner failed with an OutOfMemoryError. \\
+
+
+\begin{lstlisting}
+Exception in thread "Thread-0" java.lang.OutOfMemoryError: GC overhead limit exceeded
+at JSHOP2.State.iterator(State.java:227)
+at JSHOP2.PreconditionAtomic.resetHelper(PreconditionAtomic.java:62)
+at JSHOP2.Precondition.reset(Precondition.java:126)
+at Precondition16.resetHelper(storegroceries.java:2357)
+at JSHOP2.Precondition.reset(Precondition.java:126)
+at Precondition17.resetHelper(storegroceries.java:2432)
+at JSHOP2.Precondition.reset(Precondition.java:126)
+
+\end{lstlisting}
+
+\vspace{5mm}
+
+We changed te compiling option to -r and were able to get plans for $n$ objects ($n= 1, 2, 3, 4, 5$) as shown in Table \ref{table:n-objects}. We have tested our solution for problem 4 with up to 20 objects. The resulting plan has 358 steps and its is accomplished using 109 primitive tasks: \\
+
+\begin{lstlisting}
+
+[ 1 ]    (!locate t1)
+[ 2 ]    (!locate c1)
+[ 3 ]    (!move r1 t1 c1)
+[ 4 ]    (!open-door d1)
+[ 5 ]    (!label-shelf s1)
+[ 6 ]    (!label-shelf s2)
+[ 7 ]    (!label-shelf s3)
+[ 8 ]    (!move r1 c1 t1)
+[ 9 ]    (!label-object a1)
+[ 10 ]    (!label-object a2)
+[ 11 ]    (!label-object a3)
+[ 12 ]    (!label-object a4)
+[ 13 ]    (!label-object a5)
+[ 14 ]    (!label-object a6)
+[ 15 ]    (!label-object a7)
+[ 16 ]    (!label-object a8)
+[ 17 ]    (!label-object a9)
+[ 18 ]    (!label-object a10)
+[ 19 ]    (!label-object a11)
+[ 20 ]    (!label-object a12)
+[ 21 ]    (!label-object a13)
+[ 22 ]    (!label-object a14)
+[ 23 ]    (!label-object a15)
+[ 24 ]    (!label-object a16)
+[ 25 ]    (!label-object a17)
+[ 26 ]    (!label-object a18)
+[ 27 ]    (!label-object a19)
+[ 28 ]    (!label-object a20)
+[ 29 ]    (!pickup a1 t1)
+[ 30 ]    (!putdown a1 tray1)
+[ 31 ]    (!pickup a2 t1)
+[ 32 ]    (!putdown a2 tray1)
+[ 33 ]    (!pickup a3 t1)
+[ 34 ]    (!putdown a3 tray1)
+[ 35 ]    (!pickup a4 t1)
+[ 36 ]    (!putdown a4 tray1)
+[ 37 ]    (!pickup a5 t1)
+[ 38 ]    (!putdown a5 tray1)
+[ 39 ]    (!pickup a6 t1)
+[ 40 ]    (!putdown a6 tray1)
+[ 41 ]    (!pickup a7 t1)
+[ 42 ]    (!putdown a7 tray1)
+[ 43 ]    (!pickup a8 t1)
+[ 44 ]    (!putdown a8 tray1)
+[ 45 ]    (!pickup a9 t1)
+[ 46 ]    (!putdown a9 tray1)
+[ 47 ]    (!pickup a10 t1)
+[ 48 ]    (!putdown a10 tray1)
+[ 49 ]    (!pickup a11 t1)
+[ 50 ]    (!putdown a11 tray1)
+[ 51 ]    (!pickup a12 t1)
+[ 52 ]    (!putdown a12 tray1)
+[ 53 ]    (!pickup a13 t1)
+[ 54 ]    (!putdown a13 tray1)
+[ 55 ]    (!pickup a14 t1)
+[ 56 ]    (!putdown a14 tray1)
+[ 57 ]    (!pickup a15 t1)
+[ 58 ]    (!putdown a15 tray1)
+[ 59 ]    (!pickup a16 t1)
+[ 60 ]    (!putdown a16 tray1)
+[ 61 ]    (!pickup a17 t1)
+[ 62 ]    (!putdown a17 tray1)
+[ 63 ]    (!pickup a18 t1)
+[ 64 ]    (!putdown a18 tray1)
+[ 65 ]    (!pickup a19 t1)
+[ 66 ]    (!putdown a19 tray1)
+[ 67 ]    (!pickup a20 t1)
+[ 68 ]    (!putdown a20 tray1)
+[ 69 ]    (!move r1 t1 c1)
+[ 70 ]    (!pickup a1 tray1)
+[ 71 ]    (!putdown a1 s1)
+[ 72 ]    (!pickup a6 tray1)
+[ 73 ]    (!putdown a6 s1)
+[ 74 ]    (!pickup a11 tray1)
+[ 75 ]    (!putdown a11 s1)
+[ 76 ]    (!pickup a16 tray1)
+[ 77 ]    (!putdown a16 s1)
+[ 78 ]    (!pickup a2 tray1)
+[ 79 ]    (!putdown a2 s2)
+[ 80 ]    (!pickup a3 tray1)
+[ 81 ]    (!putdown a3 s2)
+[ 82 ]    (!pickup a7 tray1)
+[ 83 ]    (!putdown a7 s2)
+[ 84 ]    (!pickup a8 tray1)
+[ 85 ]    (!putdown a8 s2)
+[ 86 ]    (!pickup a12 tray1)
+[ 87 ]    (!putdown a12 s2)
+[ 88 ]    (!pickup a13 tray1)
+[ 89 ]    (!putdown a13 s2)
+[ 90 ]    (!pickup a17 tray1)
+[ 91 ]    (!putdown a17 s2)
+[ 92 ]    (!pickup a18 tray1)
+[ 93 ]    (!putdown a18 s2)
+[ 94 ]    (!pickup a4 tray1)
+[ 95 ]    (!putdown a4 s3)
+[ 96 ]    (!pickup a5 tray1)
+[ 97 ]    (!putdown a5 s3)
+[ 98 ]    (!pickup a9 tray1)
+[ 99 ]    (!putdown a9 s3)
+[ 100 ]    (!pickup a10 tray1)
+[ 101 ]    (!putdown a10 s3)
+[ 102 ]    (!pickup a14 tray1)
+[ 103 ]    (!putdown a14 s3)
+[ 104 ]    (!pickup a15 tray1)
+[ 105 ]    (!putdown a15 s3)
+[ 106 ]    (!pickup a19 tray1)
+[ 107 ]    (!putdown a19 s3)
+[ 108 ]    (!pickup a20 tray1)
+[ 109 ]    (!putdown a20 s3)
+
+\end{lstlisting}
+
+\vspace{5mm}
+
+The domain for solving problems 1 to 4 works under the assumptions described in section \ref{sec:assumptions}. If one of these assumptions is not met, the planner will fail. Modifications can be made to increase the flexibility of the domain. For instance, if the robot is not at the table, include a task for localizing and moving the robot to the table. If the shelf does not contain an object, assign one label to it based on the object categories. 
 
 	\bibliography{bibliography}{}
 	\bibliographystyle{plain}
