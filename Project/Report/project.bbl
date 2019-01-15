@@ -1,0 +1,23 @@
+\begin{thebibliography}{1}
+
+\bibitem{slides}
+Iman~Awaad Gerhard K.~Kraetzschmar.
+\newblock {Planning and Scheduling: Hierarchical Task Network Planning. Slides
+  H-BRS}.
+
+\bibitem{Ilghami2006}
+Okhtay Ilghami.
+\newblock {Documentation for JSHOP2}.
+\newblock 2006.
+
+\bibitem{Nau2003}
+Dana Nau, J~William Murdock, and Dan Wu.
+\newblock {SHOP2 : An HTN Planning System}.
+\newblock 20:379--404, 2003.
+
+\bibitem{Nau2001}
+Dana Nau, College Park, and College Park.
+\newblock {Total-Order Planning with Partially Ordered Subtasks}.
+\newblock (August):1--6, 2001.
+
+\end{thebibliography}

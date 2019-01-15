@@ -1,0 +1,14 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Selection of the Planner}{}% 2
+\BOOKMARK [1][-]{section.3}{Installation}{}% 3
+\BOOKMARK [1][-]{section.4}{Solution}{}% 4
+\BOOKMARK [2][-]{subsection.4.1}{Modeling the domain}{section.4}% 5
+\BOOKMARK [2][-]{subsection.4.2}{Defining the problem}{section.4}% 6
+\BOOKMARK [2][-]{subsection.4.3}{Problem 1}{section.4}% 7
+\BOOKMARK [2][-]{subsection.4.4}{Problem 2}{section.4}% 8
+\BOOKMARK [2][-]{subsection.4.5}{Problem 3}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.6}{Problem 4}{section.4}% 10
+\BOOKMARK [1][-]{section.5}{Limitations and Planning Failures}{}% 11
+\BOOKMARK [2][-]{subsection.5.1}{The planner does not have enough information for classifying an object.}{section.5}% 12
+\BOOKMARK [2][-]{subsection.5.2}{A shelf does not hold an object in the initial state.}{section.5}% 13
+\BOOKMARK [2][-]{subsection.5.3}{The problem definition is compiled using java -ra}{section.5}% 14
