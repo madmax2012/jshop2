@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/Arch Linux) (preloaded format=pdflatex 2019.1.14)  15 JAN 2019 14:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/Arch Linux) (preloaded format=pdflatex 2019.1.14)  15 JAN 2019 16:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1071,24 +1071,34 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [2
 
 ]
-LaTeX Font Info:    Try loading font information for OMS+cmss on input line 42.
+LaTeX Font Info:    Try loading font information for OMS+cmss on input line 47.
 
-LaTeX Font Info:    No file OMScmss.fd. on input line 42.
+LaTeX Font Info:    No file OMScmss.fd. on input line 47.
 
 
 LaTeX Font Warning: Font shape `OMS/cmss/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
-(Font)              for symbol `textbullet' on input line 42.
+(Font)              for symbol `textbullet' on input line 47.
 
 
 LaTeX Font Warning: Font shape `OT1/cmss/bx/sl' undefined
-(Font)              using `OT1/cmss/bx/n' instead on input line 42.
+(Font)              using `OT1/cmss/bx/n' instead on input line 47.
 
 [3
 
-] [4
+]
+<jshop_comparision.png, id=70, 1287.81125pt x 847.165pt>
+File: jshop_comparision.png Graphic file (type png)
+<use jshop_comparision.png>
+Package pdftex.def Info: jshop_comparision.png  used on input line 57.
+(pdftex.def)             Requested size: 304.21866pt x 200.11794pt.
 
-] [5
+Overfull \vbox (16.01195pt too high) detected at line 57
+ []
+
+[4
+
+ <./jshop_comparision.png>] [5
 
 ] [6
 
@@ -1110,42 +1120,35 @@ LaTeX Font Warning: Font shape `OT1/cmss/bx/sl' undefined
 \tf@snm=\write8
 \openout8 = `pas_project.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 128.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 128.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 108.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 108.
  (./pas_project.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 128.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 128.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 108.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 108.
+Package rerunfilecheck Info: File `pas_project.out' has not changed.
+(rerunfilecheck)             Checksum: 72086400025B0D12E63521B182487544;149.
 
-
-Package rerunfilecheck Warning: File `pas_project.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `pas_project.out':
-(rerunfilecheck)             Before: DB8CFDFE2B55A7B229D1891DD8E43A4F;142
-(rerunfilecheck)             After:  F450FA8A37528593C984DBA238FC4FCC;141.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 23148 strings out of 492639
- 454740 string characters out of 6135497
- 545031 words of memory out of 5000000
- 26506 multiletter control sequences out of 15000+600000
- 12619 words of font info for 46 fonts, out of 8000000 for 9000
+ 23097 strings out of 492639
+ 453113 string characters out of 6135497
+ 543031 words of memory out of 5000000
+ 26454 multiletter control sequences out of 15000+600000
+ 12214 words of font info for 45 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 61i,13n,97p,1843b,698s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 61i,13n,92p,1843b,698s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb></usr/share/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmss9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-ssbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></u
-sr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
-Output written on pas_project.pdf (10 pages, 78215 bytes).
+texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texmf-dist/font
+s/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmtt10.pfb>
+Output written on pas_project.pdf (10 pages, 240027 bytes).
 PDF statistics:
- 142 PDF objects out of 1000 (max. 8388607)
- 100 compressed objects within 1 object stream
- 24 named destinations out of 1000 (max. 500000)
- 163 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 138 PDF objects out of 1000 (max. 8388607)
+ 97 compressed objects within 1 object stream
+ 25 named destinations out of 1000 (max. 500000)
+ 168 words of extra memory for PDF output out of 10000 (max. 10000000)
 

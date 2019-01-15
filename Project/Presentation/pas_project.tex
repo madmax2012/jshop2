@@ -35,40 +35,52 @@
 
 \begin{frame}{\textsl{ Task }}
 
+Storing Groceries
+
 \begin{itemize}
-	\item 
+	\item \textbf{Case 1}: Everything is known. One object is on the table and has to be placed at any shelf after the cupboard has been opened.
+	\item \textbf{Case 2}: The amount of Objects, the table and the cupboard have to be located. The objects have to be placed on the shelves.
+	\item \textbf{Case 3}: As case 2 - In addition to not knowing the number of objects, the objects themself are also unknown.
+	\item \textbf{Case 4}: In addition to case 3 the cupboard is unknown and has to be explored. The items have to be put in different categories and sorted by category on the shelf.
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}{\textsl{M\"ogliche Abwandlungen von Pair Programming}}
+\begin{frame}{\textsl{Selection of the Planner}}
 	  
-	\begin{itemize}
-		\item 
-	\end{itemize}
-
-
-\begin{alertblock}{Conclusion}
-	Abwandlung bei uns: Pairing
-\end{alertblock}
-\end{frame}
-
-
-\section{Implementation}
-
-\begin{frame}{\textsl{ Was m\"ochten wir mit "Pairing" erreichen}}
-	\begin{itemize}
-		\item 
-	\end{itemize}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.99\linewidth]{jshop_comparision}
+	\label{fig:kim}
+\end{figure}
 
 \end{frame}
 
 
+\begin{frame}{\textsl{Using JSHOP2}}
+	\begin{itemize}
+		\item Get jshop from \url{https://github.com/mas-group/jshop2}
+		\item Set environment \textbf{{\tiny export CLASSPATH="`pwd`/bin.build/JSHOP2.jar:`pwd`/antlr.jar:."}}
+		\item Compile using \textbf{{\tiny make c}}
+		\item Run by calling \textbf{{\tiny make problem1/2/3/4}}
+	\end{itemize}
+
+\end{frame}
 
 
-\begin{frame}{Guidelines}
+
+
+\section{Limitations and Issues}
+
+\begin{frame}{Limitations}
 \begin{itemize}
-	\item
+	\item Without sufficient prior information the planner is not able to classify objects
+	\item In problem 4, if the shelves don't have example objects  the planner has problems putting categories for them.
+	\item Executing with java -ra generates all possible plans 
+	\begin{itemize}
+		\item High space and time complexity
+		\item Maximum of 4 objects to avoid outOfMemoryError
+	\end{itemize} 
 \end{itemize}
 \end{frame}
 
