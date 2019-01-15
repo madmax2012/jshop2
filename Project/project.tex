@@ -48,9 +48,9 @@
  	
  	The java version of the SHOP2 planner is available in \url{https://github.com/mas-group/jshop2} \\
  	
- 	% TODO
- 	
- 	During the installation we encountered some challenges like ... 
+ 	After cloning the repositories some environment variables, needed for compilation, have to be set. Since the documentation available on github is fairly outdated we did this by calling \textbf{export CLASSPATH="`pwd`/bin.build/JSHOP2.jar:`pwd`/antlr.jar:."}. Afterwards the project can be compiled by running \textbf{make c}. This is needed, since jshop2 runs the environments in java, while the description is done in lisp. The compiler translates given lisp code into java and creates exectables from it.
+ 	Those can then be called by running \textbf{make problem(1/2/3/4)}.
+
 
 	
 	\section{Solution}
@@ -1058,11 +1058,11 @@ The problem definition for this case is as follows: \\
 
 \end{lstlisting}
 
-\vspace{5mm}
+%\vspace{5mm}
 
 Figure \ref{fig:failure-2} shows that the planner fails after 60 steps.
 
-\begin{figure} [h!]
+\begin{figure} [ht!]
 	\centering
 	\includegraphics[width=0.65\linewidth]{images/failure-1}
 	\caption{Failure: The planner does not have enough information for classifying an object.}
@@ -1078,9 +1078,9 @@ Figure \ref{fig:failure-2} shows that the planner fails after 60 steps.
 \end{figure}
 
 
-\subsection{The problem definition is compiled using the option -ra}
+\subsection{The problem definition is compiled using java -ra}
 
-The problem descriptions can be compiled into java using the commands \cite{Ilghami2006}: 
+The problem descriptions can be compiled into java bytecode using the commands documented in \cite{Ilghami2006}, like for example: 
 
  \begin{itemize}
  	\item java JSHOP2.InternalDomain -r InputFileName
@@ -1088,9 +1088,9 @@ The problem descriptions can be compiled into java using the commands \cite{Ilgh
  	\item java JSHOP2.InternalDomain -ra InputFileName
  \end{itemize}
  
- If the option -r is used, the planner returns the first plan that it finds, it the option -ra is used, it returns all possible plans, and if -rSomeInteger is used, it outputs SomeInteger plans for the problem. \\
+ If the option -r is used, the planner returns the first plan that it finds, in combination with a (-ra) all possible plans are returned. With -rSomeInteger the number of plans which are to be explored can be defined. \\
  
- Initially, we compiled our problem definitions using the -ra command, but found out that when more than 4 objects were included in the problem definition, the planner failed with an OutOfMemoryError. \\
+ Initially, we compiled our problem definitions using the -ra command, as it is shown in many of the jshop2 examples, but since we have an exponential growth in memory consumption, including more than 4 objects in the problem definition leads to OutOfMemoryError on our machines. \\
 
 
 \begin{lstlisting}
