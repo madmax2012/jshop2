@@ -26,75 +26,75 @@
 	Maximilian Messing}
 
 \begin{document}
-	
-	\maketitle 
-	
- 	\section{Introduction} 
- 	
+
+	\maketitle
+
+ 	\section{Introduction}
+
  	This project creates plans for storing groceries tasks in the context of RoboCup @home. It uses the java version of the SHOP2 HTN Planner. \\
- 	
+
  	The robot picks up groceries from a table and stores them in a cupboard with 3 shelves. The door of the cupboard is closed at the beginning,
  	and the robot has a tray to carry more than one item at a time.
- 	
+
  	\section{Selection of the Planner}
- 
+
  	SHOP2 (Simple Hierarchical Ordered Planner) is an HTN Planner that uses partial-order forward decomposition. SHOP2 does not require methods to be totally ordered, i.e., the subtasks of a method can have partial orders. Because of this property, SHOP2 can generate plans by interleaving tasks of different methods. Its predecessor SHOP can only handle methods with totally ordered subtasks and thus, is more limited in the plans it can generate. SHOP can overcome this limitation by adding global methods that allow to perform more general actions \cite{Nau2001}, like adding a pick-two-object method instead of just having a pick-one-object method. However, SHOP2 can interleave the tasks of two pick-one-object methods in such a way that it gives the same results as the more global method pick-two-objects \cite{slides}. \\
- 	
- 	With SHOP2 the knowledge base is easier to build, because it requires less global information. Having more compact knowledge bases makes it faster to generate them and easier to debug them \cite{Nau2001}. In addition, the methods of the SHOP2 planner allow to have a list of preconditions which are evaluated in order of appearance. This feature facilitates the definition of methods, since a method can achieve several decompositions based on the preconditions \cite{Nau2003}. \\
- 	
+
+ 	With SHOP2 the knowledge base is easier to build, because it requires less global information. Having more compact knowledge bases makes it faster to generate them and easier to debug them \cite{Nau2001}. In addition, the methods of the SHOP2 planner allow a list of preconditions which are evaluated in order of appearance. This feature facilitates the definition of methods, since a method can achieve several decompositions based on the preconditions \cite{Nau2003}. \\
+
  	Moreover, the SHOP2 algorithm achieved one of the top four awards in the 2002 International Planning Competition \cite{Nau2003}.
- 	
+
  	\section{Installation}
- 	
+
  	The java version of the SHOP2 planner is available in \url{https://github.com/mas-group/jshop2} \\
- 	
- 	After cloning the repositories some environment variables, needed for compilation, have to be set. Since the documentation available on github is fairly outdated we did this by calling \textbf{export CLASSPATH="`pwd`/bin.build/JSHOP2.jar:`pwd`/antlr.jar:."}. Afterwards the project can be compiled by running \textbf{make c}. This is needed, since jshop2 runs the environments in java, while the description is done in lisp. The compiler translates given lisp code into java and creates exectables from it.
+
+ 	After cloning the repositories some environment variables, which are needed for compilation, have to be set. Since the documentation available on github is fairly outdated we did this by calling \textbf{export CLASSPATH="`pwd`/bin.build/JSHOP2.jar:`pwd`/antlr.jar:."}. Afterwards the project can be compiled by running \textbf{make c}. This is needed, since jshop2 runs the environments in java, while the description is done in lisp. The compiler translates given lisp code into java and creates exectables from it.
  	Those can then be called by running \textbf{make problem(1/2/3/4)}.
 
 
-	
+
 	\section{Solution}
-	
+
 	\subsection{Modeling the domain}
-	
-	We run the four problems using the same domain model. The domain includes the set of operators, methods and axioms used by the planner. We started with a smaller domain for problem 1 and added information as we worked through the rest of the problems. 
-	
+
+	We ran the four problems using the same domain model. The domain includes the set of operators, methods, and axioms used by the planner. We started with a smaller domain for problem 1 and added information as we worked through the rest of the problems.
+
 	Each problem starts with a different compound task as shown in Table \ref{table:compund-tasks}.
-	
+
 	\begin{table}[h!]
-		
+
 	\centering
-		
+
 	\begin{tabular}{cl}
-		\toprule   
-		
+		\toprule
+
 		Problem & Task to achieve \\
 		\midrule
-		
+
 		1 & mode-known-object ?a ?t ?c ?s \\
-		
+
 		\midrule
-		
+
 		2 & move-known-objects ?t ?c ?s ?tray \\
-		
+
 		\midrule
-		
+
 		3 & move-uncategorized-objects ?t ?c ?s ?tray ?camera \\
-		
+
 		\midrule
-		
+
 		4 & move-unlabeled-object-unknown-cupboard ?t ?c ?s ?tray ?camera \\
-	
+
 		\bottomrule
 	\end{tabular}
-	\caption{Tasks to achieve for problems 1 to 4.} 
+	\caption{Tasks to achieve for problems 1 to 4.}
 	\label{table:compund-tasks}
 	\end{table}
-	
+
 	\subsubsection*{Assumptions:} \label{sec:assumptions}
-	
+
 	The following assumptions were made when writing the domain:
-	
+
 	\begin{itemize}
 		\item The initial position of the robot is at the table.
 		\item All objects on the table should be stored by the robot.
@@ -102,38 +102,38 @@
 		\item There is only one table.
 		\item The robot uses a tray for carrying objects and the capacity of the tray is infinite. Except for problem 1, where the robot carries only one object using its gripper.
 		\item The robot has a camera (problem 3 and 4).
-		\item All items should have information that can be used by the robot to classify them (problem 4).		
+		\item All items should have information that can be used by the robot to classify them (problem 4).
 		\item Each shelf initially holds one object (problem 4).
-		\item There is one shelf per object category. 
+		\item There is one shelf per object category.
 	\end{itemize}
-	
+
 	If the initial state does not follow the assumptions, the planner will fail because the domain does not include operators and/or methods to handle those situations. Section \ref{sec:limitations} discusses some of the limitations of our domain and recommendations on how to adapt it to handle more complex scenarios.
-	
+
 	\subsubsection*{Domain}
-	
-	\begin{lstlisting}		
+
+	\begin{lstlisting}
 (defdomain storegroceries
 	(
 	;;----------------store-groceries operators----------------
-	
+
 	;; To pickup an object ?a from a surface (for our domain, the surface is either a shelf of a tray)
 	(:operator (!pickup ?a ?s)
 		()
 		((clear ?a) (on ?a ?s))
 		((holding ?a)))
-	
+
 	;; To open the cupboard door
 	(:operator (!open-door ?d)
 		((door-closed ?d))
 		((door-closed ?d))
 		((door-open ?d)))
-	
+
 	;; To putdown an object on a surface (for our domain, the surface is either a shelf of a tray)
 	(:operator (!putdown ?a ?s)
 		()
 		((holding ?a))
 		((on ?a ?s) (clear ?a)))
-	
+
 	;; To move the robot ?r from location ?x to location ?y
 	(:operator (!move ?r ?x ?y)
 		((robot-at ?r ?x))
@@ -146,19 +146,19 @@
 		((unknown-location ?a))
 		((unknown-location ?a))
 		((known-location ?a)))
-	
+
 	;; To perceive an object with camera ?camera
 	(:operator (!perceive ?a ?camera)
 		()
 		((uncategorized ?a))
 		((categorized ?a)))
-	
+
 	;; To label an object as a snack
 	(:operator (!label-object ?a)
 		((is-snack ?a))
 		nil
 		((snack-label ?a)(labeled ?a)))
-		
+
 	;; To label an object as a drink
 	(:operator (!label-object ?a)
 		((is-drink ?a))
@@ -170,13 +170,13 @@
 		((is-fruit ?a))
 		nil
 		((fruit-label ?a)(labeled ?a)))
-	
+
 	;; To label the contents of a shelf. A shelf holds objects of one category
 	(:operator (!label-shelf ?s)
 		((holds-snack ?s))
 		nil
 		((snack-label ?s)(labeled ?s)))
-	
+
 	(:operator (!label-shelf ?s)
 		((holds-drink ?s))
 		nil
@@ -194,75 +194,75 @@
 		branch1
 		((robot-at ?r ?t)(on ?a ?t)(door-open ?d))
 		((!pickup ?a ?t)(!move ?r ?t ?c)(!putdown ?a ?s))
-		
+
 		branch2
 		((robot-at ?r ?t)(on ?a ?t)(door-closed ?d))
 		((!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(!pickup ?a ?t)(!move ?r ?t ?c)(!putdown ?a ?s))
 	)
-	
+
 	;; To locate the table and the cupboard
 	(:method (locate-table-and-cupboard ?t ?c)
 		()
 		((!locate ?t)(!locate ?c))
 	)
-	
+
 	;; To move objects from the table ?t to the cupboard ?c and place them on shelf ?s, using a ?tray
 	(:method (move-known-objects ?t ?c ?s ?tray)
 		branch1
 		((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-open ?d))
 		((load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
-		
+
 		branch2
 		((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-closed ?d))
 		((!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
-		
+
 		branch3
 		((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-open ?d))
 		((locate-table-and-cupboard ?t ?c)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
-		
+
 		branch4
 		((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-closed ?d))
 		((locate-table-and-cupboard ?t ?c)(!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
 	)
-	
+
 	;; To move uncategorized objects from the table ?t to the cupboard ?c and place them on shelf ?s, using a ?tray. Objects are perceived using camera ?camera
 	(:method (move-uncategorized-objects ?t ?c ?s ?tray ?camera)
 		branch1
 		((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-open ?d))
 		((categorize ?camera)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
-		
+
 		branch2
 		((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-closed ?d))
 		((categorize ?camera)(!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
-		
+
 		branch3
 		((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-open ?d))
 		((categorize ?camera)(locate-table-and-cupboard ?t ?c)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
-		
+
 		branch4
 		((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-closed ?d))
 		((locate-table-and-cupboard ?t ?c)(categorize ?camera)(!move ?r ?t ?c)(!open-door ?d)(!move ?r ?c ?t)(load-tray ?tray ?t)(!move ?r ?t ?c)(unload-tray ?tray ?s))
 	)
-	
+
 	;; To move unlabeled objects to unknown cupboard
 	(:method (move-unlabeled-object-unknown-cupboard ?t ?c ?s ?tray ?camera)
 		branch1
 		((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-open ?d))
 		((!move ?r ?t ?c)(explore-cupboard ?c)(!move ?r ?c ?t)(label-objects)(load-tray ?tray ?t)(!move ?r ?t ?c)(place-in-shelf ?tray))
-		
+
 		branch2
 		((known-location ?t)(known-location ?c)(robot-at ?r ?t)(door-closed ?d))
 		((!move ?r ?t ?c)(!open-door ?d)(explore-cupboard ?c)(!move ?r ?c ?t)(label-objects)(load-tray ?tray ?t)(!move ?r ?t ?c)(place-in-shelf ?tray))
-		
+
 		branch3
 		((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-open ?d))
 		((locate-table-and-cupboard ?t ?c)(!move ?r ?t ?c)(explore-cupboard ?c)(!move ?r ?c ?t)(label-objects)(load-tray ?tray ?t)(!move ?r ?t ?c)(place-in-shelf ?tray))
-		
+
 		branch4
 		((unknown-location ?t)(unknown-location ?c)(robot-at ?r ?t)(door-closed ?d))
 		((locate-table-and-cupboard ?t ?c)(!move ?r ?t ?c)(!open-door ?d)(explore-cupboard ?c)(!move ?r ?c ?t)(label-objects)(load-tray ?tray ?t)(!move ?r ?t ?c)(place-in-shelf ?tray))
 	)
-	
+
 	;; To place objects on the tray ?tray (so that the robot can carry more than one object at a time). The objects are picked up from the table ?t
 	(:method (load-tray ?tray ?t)
 		branch1
@@ -272,7 +272,7 @@
 		((not (on ?a ?t)))
 		nil  ;do nothing (we are done loading objects)
 		)
-		
+
 		;; To place all the object from the tray ?tray on the shelf ?s
 		(:method (unload-tray ?tray ?s)
 		branch1
@@ -282,58 +282,58 @@
 		((not (on ?a ?tray)))
 		nil  ;do nothing (we are done unloading objects)
 	)
-	
+
 	;; To place objects from the tray ?tray on the shelf that corresponds to the object category
 	(:method (place-in-shelf ?tray)
 		; If the object is a snack, choose the shelf labeled as 'snack-label'
 		branch1
 		((on ?a ?tray)(snack-label ?a)((shelf ?z)(snack-label ?z)))
 		((!pickup ?a ?tray)(!putdown ?a ?z)(place-in-shelf ?tray))
-		
+
 		; If the object is a drink, choose the shelf labeled as 'drink-label'
 		branch2
 		((on ?a ?tray)(drink-label ?a)((shelf ?z)(drink-label ?z)))
 		((!pickup ?a ?tray)(!putdown ?a ?z)(place-in-shelf ?tray))
-		
+
 		; If the object is a fruit, choose the shelf labeled as 'fruit-label'
 		branch3
 		((on ?a ?tray)(fruit-label ?a)((shelf ?z)(fruit-label ?z)))
 		((!pickup ?a ?tray)(!putdown ?a ?z)(place-in-shelf ?tray))
-		
+
 		; If there are no more objects on the tray, do nothing
 		branch4
 		((not (on ?a ?tray)))
 		nil  ;do nothing (we are done unloading objects)
 	)
-	
+
 	;; To perceive and categorize objects
 	(:method (categorize ?camera)
 		branch1
 		(forall (?z) ((object ?z))(categorized ?z))
 		nil
-		
+
 		branch2
 		((object ?z)(uncategorized ?z))
 		((!perceive ?z ?camera)(categorize ?camera))
 	)
-	
+
 	;; To label the objects
 	(:method (label-objects)
 		branch1
 		(forall (?z) ((object ?z))(labeled ?z))
 		nil
-		
+
 		branch2
 		((object ?z)(not (labeled ?z)))
 		((!label-object ?z)(label-objects))
 	)
-	
+
 	;; To explore the shelves of the cupboard ?c
 	(:method (explore-cupboard ?c)
 		branch1
 		(forall (?z) ((shelf ?z))(labeled ?z))
 		nil
-		
+
 		branch2
 		((shelf ?z)(not (labeled ?z)))
 		((!label-shelf ?z)(explore-cupboard ?c))
@@ -345,40 +345,40 @@
 	(:- (is-snack ?a)
 		((is-bag ?a)(is-crunchy ?a))
 	)
-	
+
 	; Characteristics of a drink
 	(:- (is-drink ?a)
 		(or (is-bottle ?a)(is-can ?a))
 	)
-	
+
 	; Characteristics of a fruit
 	(:- (is-fruit ?a)
 		((is-round ?a))
 	)
-			
+
 	)
 )
 	\end{lstlisting}
-	
-	
+
+
 	\subsection{Defining the problem}
-	
-	A problem file is created for each of the problems. The problem files contain the initial state and the compound task that the planner has to achieve for solving each problem. The HTN planner uses this information to create a plan based on the domain information. 
-	
+
+	A problem file is created for each of the problems. The problem files contain the initial state and the compound task that the planner has to achieve for solving each problem. The HTN planner uses this information to create a plan based on the domain information.
+
 
 	\subsection{Problem 1}
-	
+
 	\begin{itemize}
 		\item The location of the table and the cupboard are known.
 		\item There is one known and located object on the table.
 		\item The door of the cupboard is closed.
 		\item Place the object on any shelf.
 	\end{itemize}
-	
+
 	\newpage
-	
+
 	\subsubsection*{Planning problem}
-	
+
 	\begin{lstlisting}
 (defproblem problem1 storegroceries
 	;;Problem 1
@@ -394,13 +394,13 @@
 	((move-known-object a1 t1 c1 s1))
 )
 	\end{lstlisting}
-	
+
 	\subsubsection*{Generated Plan}
-	
+
 	To get the plan, run: \verb|make problem1| \\
-	
-	Figure \ref{fig:probem1_gui} shows that the the plan is generated in 16 steps. The task is achieved by performing a sequence of 6 primitive tasks: \\
-	
+
+	Figure \ref{fig:probem1_gui} shows that the plan is generated in 16 steps. The task is achieved by performing a sequence of 6 primitive tasks: \\
+
 	\begin{lstlisting}
 [ 1 ]    (!move r1 t1 c1)
 [ 2 ]    (!open-door d1)
@@ -409,20 +409,20 @@
 [ 5 ]    (!move r1 t1 c1)
 [ 6 ]    (!putdown a1 s1)
 	\end{lstlisting}
-	
+
 	\subsection{Problem 2}
-	
+
 	\begin{itemize}
 		\item The table and the cupboard have to be located.
-		\item The are $n$ (2 to 5) known and located objects on the table.
+        \item The are $n$ (where $n$ is between 2 to 5 inclusively) known and located objects on the table.
 		\item The door of the cupboard is closed.
 		\item Place the objects on any shelf.
 	\end{itemize}
-	
+
 	\subsubsection*{Planning problem}
-	
+
 	The problem for 5 objects is represented as follows:
-	
+
 	\begin{lstlisting}
 (defproblem problem2 storegroceries
 	;;Problem2
@@ -443,13 +443,13 @@
 	((move-known-objects t1 c1 s1 tray1))
 )
 	\end{lstlisting}
-	
+
 	\subsubsection*{Generated Plan}
-	
+
 	To get the plan, run: \verb|make problem2| \\
-	
+
 	Figure \ref{fig:problem2_gui} shows that the the plan is generated in 82 steps. The task is achieved by performing a sequence of 26 primitive tasks: \\
-	
+
 	\begin{lstlisting}
 	[ 1 ]    (!locate t1)
 	[ 2 ]    (!locate c1)
@@ -477,13 +477,13 @@
 	[ 24 ]    (!putdown a4 s1)
 	[ 25 ]    (!pickup a5 tray1)
 	[ 26 ]    (!putdown a5 s1)
-	\end{lstlisting} 
-	
+	\end{lstlisting}
+
 	\vspace{5mm}
-	
-	
+
+
 	For testing with less objects, the planning problem has to define less objects in the initial state. For instance, for 3 objects, the planning problem is: \\
-	
+
 	\begin{lstlisting}
 (defproblem problem2 storegroceries
 	;;Problem2
@@ -502,11 +502,11 @@
 	((move-known-objects t1 c1 s1 tray1))
 )
 	\end{lstlisting}
-	
+
 	\vspace{5mm}
-	
+
 	The plan is generated in 58 steps and consists of 18 primitive tasks: \\
-	
+
 	\begin{lstlisting}
 	[ 1 ]    (!locate t1)
 	[ 2 ]    (!locate c1)
@@ -527,20 +527,20 @@
 	[ 17 ]    (!pickup a3 tray1)
 	[ 18 ]    (!putdown a3 s1)
 	\end{lstlisting}
-		
+
 	\subsection{Problem 3}
-	
+
 		\begin{itemize}
 			\item The table and the cupboard have to be located.
-			\item There are $n$ (2 to 5) unknown objects on the table (perception has to be used)
+			\item There are $n$ (where $n$ is between 2 to 5 inclusively) unknown objects on the table (perception has to be used)
 			\item The door of the cupboard is closed.
 			\item Place the objects on any shelf.
 		\end{itemize}
-	
+
 	\subsubsection*{Planning problem}
-	
+
 	The problem for 5 objects is represented as: \\
-	
+
 	\begin{lstlisting}
 (defproblem problem3 storegroceries
 	;;Problem3
@@ -562,13 +562,13 @@
 	((move-uncategorized-objects t1 c1 s1 tray1 camera1))
 )
 	\end{lstlisting}
-	
+
 	\subsubsection*{Generated Plan}
-	
+
 	To get the plan, run: \verb|make problem3| \\
-	
+
 	Figure \ref{fig:problem3_gui} shows that the the plan for 5 objects is generated in 104 steps. The task is achieved by performing a sequence of 31 primitive tasks: \\
-	
+
 	\begin{lstlisting}
 [ 1 ]    (!locate t1)
 [ 2 ]    (!locate c1)
@@ -602,9 +602,9 @@
 [ 30 ]    (!pickup a5 tray1)
 [ 31 ]    (!putdown a5 s1)
 	\end{lstlisting}
-	
+
 \vspace{5mm}
-	
+
 For testing with less objects, the planning problem has to define less objects in the initial state. For instance, for 3 objects, the planning problem is: \\
 
 \begin{lstlisting}
@@ -654,22 +654,22 @@ The plan is generated in 72 steps and consists of 21 primitive tasks: \\
 [ 20 ]    (!pickup a3 tray1)
 [ 21 ]    (!putdown a3 s1)
 \end{lstlisting}
-		
-	
+
+
 	\subsection{Problem 4}
-	
+
 		\begin{itemize}
 			\item The table and the cupboard have to be located.
 			\item The cupboard has to be explored. Each shelf holds object of a category.
-			\item There are $n$ (2 to 5) unknown objects on the table (perception has to be used). Each object belongs to a certain category.
+			\item There are $n$ (where $n$ is between 2 to 5 inclusively) unknown objects on the table (perception has to be used). Each object belongs to a certain category.
 			\item The door of the cupboard is closed.
 			\item Place each order on the correct shelf according to the category.
 		\end{itemize}
-	
+
 	\subsubsection*{Planning problem}
-	
+
 	The problem for 5 objects is represented as: \\
-	
+
 	\begin{lstlisting}
 (defproblem problem4 storegroceries
 	;;Problem4
@@ -688,7 +688,7 @@ The plan is generated in 72 steps and consists of 21 primitive tasks: \\
 		(table t1)
 		(robot r1)
 		(tray tray1)
-		
+
 		(unknown-location t1)(unknown-location c1)(unlabeled c1)
 		(holds-snack s1)
 		(holds-drink s2)
@@ -703,13 +703,13 @@ The plan is generated in 72 steps and consists of 21 primitive tasks: \\
 	((move-unlabeled-object-unknown-cupboard t1 c1 s1 tray1 camera1))
 )
 	\end{lstlisting}
-	
+
 	\subsubsection*{Generated Plan}
-	
+
 	To get the plan, run: \verb|make problem4| \\
-	
+
 	Figure \ref{fig:problem4_gui} shows that the the plan for 5 objects is generated in 118 steps. The task is achieved by performing a sequence of 34 primitive tasks: \\
-	
+
 	\begin{lstlisting}
 [ 1 ]    (!locate t1)
 [ 2 ]    (!locate c1)
@@ -747,11 +747,11 @@ The plan is generated in 72 steps and consists of 21 primitive tasks: \\
 [ 34 ]    (!putdown a5 s3)
 
 	\end{lstlisting}
-	
+
 	\vspace{5mm}
-	
+
 	For testing with less objects, the planning problem has to define less objects in the initial state. For instance, for 3 objects, the planning problem is: \\
-	
+
 	\begin{lstlisting}
 (defproblem problem4 storegroceries
 	;;Problem4
@@ -768,7 +768,7 @@ The plan is generated in 72 steps and consists of 21 primitive tasks: \\
 		(table t1)
 		(robot r1)
 		(tray tray1)
-		
+
 		(unknown-location t1)(unknown-location c1)(unlabeled c1)
 		(holds-snack s1)
 		(holds-drink s2)
@@ -781,11 +781,11 @@ The plan is generated in 72 steps and consists of 21 primitive tasks: \\
 	((move-unlabeled-object-unknown-cupboard t1 c1 s1 tray1 camera1))
 )
 	\end{lstlisting}
-	
+
 	\vspace{5mm}
-	
+
 	The plan is generated in 86 steps and consists of 24 primitive tasks: \\
-	
+
 \begin{lstlisting}
 [ 1 ]    (!locate t1)
 [ 2 ]    (!locate c1)
@@ -816,105 +816,105 @@ The plan is generated in 72 steps and consists of 21 primitive tasks: \\
 \vspace{5mm}
 
 	Table \ref{table:n-objects} compares the number of steps for generating plans for problems 2, 3 and 4 and the number of tasks in the plan, when the number of objects is 2, 3, 4 and 5.
-	
-	
+
+
 	\begin{table}[h!]
-		
+
 		\centering
-		
+
 		\begin{tabular}{cccc}
-			\toprule   
-			
+			\toprule
+
 			Problem & Objects & Steps  & Primitive tasks\\
 			\midrule
-			
+
 			\multirow{3}{*}[-3pt]{2} & {2} & {46} & {14} \\
-			
+
 			{} & {3} & {58} & {18} \\
-			
+
 			{} & {4} & {70} & {22} \\
-			
+
 			{} & {5} & {82} & {26} \\
-			
+
 			\midrule
-			
+
 			\multirow{3}{*}[-3pt]{3} & {2} & {56} & {16} \\
-			
+
 			{} & {3} & {72} & {21} \\
-			
+
 			{} & {4} & {88} & {26} \\
-			
+
 			{} & {5} & {104} & {31} \\
-			
+
 			\midrule
-			
+
 			\multirow{3}{*}[-3pt]{4} & {2} & {70} & {19} \\
-			
+
 			{} & {3} & {86} & {24} \\
-			
+
 			{} & {4} & {102} & {29} \\
-			
+
 			{} & {5} & {118} & {34} \\
-			
+
 			\bottomrule
 		\end{tabular}
-		\caption{Number of steps and tasks for plans with $n$ objects.} 
+		\caption{Number of steps and tasks for plans with $n$ objects.}
 		\label{table:n-objects}
 	\end{table}
 
-	
+
 	\begin{figure}[h!]
 		\centering
 		\includegraphics[width=0.65\linewidth]{images/problem1_gui}
 		\caption{GUI Problem 1 }
 		\label{fig:probem1_gui}
 	\end{figure}
-		
+
 	\begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.65\linewidth]{images/problem2_gui}
 	\caption{GUI Problem 2}
 	\label{fig:problem2_gui}
 	\end{figure}
-	
-	
+
+
 	\begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.65\linewidth]{images/problem3_gui}
 	\caption{GUI Problem 3}
 	\label{fig:problem3_gui}
 	\end{figure}
-	
+
 	\begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.65\linewidth]{images/problem4_gui}
 	\caption{GUI Problem 4}
 	\label{fig:problem4_gui}
 	\end{figure}
-	
+
 
 	\newpage
 
 	\section{Limitations and Planning Failures} \label{sec:limitations}
-	
+
 	The planner will fail if the initial state does not fulfill the assumptions described in section \ref{sec:assumptions}. Here we present some examples where the planner fails.
-	
+
 	\subsection{The planner does not have enough information for classifying an object.}
-	
-	
+
+
 	In problem 4, the planner classifies all the objects based on their properties. The initial state includes properties for each object, like $is-round$ or $is-can$. The axioms in the problem domain are used for classifying objects. For instance, an object is classified as a drink if it is a bottle or a can. \\
-	
+
 	\begin{lstlisting}
 ; Characteristics of a drink
 	(:- (is-drink ?a)
 	(or (is-bottle ?a)(is-can ?a))
 )
 	\end{lstlisting}
-	
+
 	\vspace{5mm}
-	
+
 	The primitive task $!label-object ?a$ labels an object. If the precondition $is-drink ?a$ is met, the object is labeled as a drink. \\
-	
+
 	\begin{lstlisting}
 ;; To label an object as a drink
 (:operator (!label-object ?a)
@@ -922,32 +922,32 @@ The plan is generated in 72 steps and consists of 21 primitive tasks: \\
 	nil
 	((drink-label ?a)(labeled ?a)))
 	\end{lstlisting}
-	
+
 	\vspace{5mm}
-	
+
 	The method $label-objects$ is called recursively until all objects are labeled. \\
-	
+
 	\begin{lstlisting}
  ;; To label the objects
  (:method (label-objects)
 	 branch1
 	 (forall (?z) ((object ?z))(labeled ?z))
 	 nil
-	 
+
 	 branch2
 	 ((object ?z)(not (labeled ?z)))
 	 ((!label-object ?z)(label-objects))
  )
 	\end{lstlisting}
-	
+
 	\vspace{5mm}
-	
+
 	If the information needed for classifying an object is missing from the problem definition, the object will no be classified and the planner will get stuck in the recursion of the method $label-objects$. \\
-	
+
 	Figure \ref{fig:failure-1} shows the output of the planner when 6 objects are in the problem definition and the information for classifying one of them is missing. The planner runs 17715 steps but fails to return a plan because the information about object $a4$ is missing. All objects should be labeled to stop the recursion. Since this condition is never met, the plan fails. \\
-	
+
 	The problem definition for this case is as follows: \\
-	
+
 	\begin{lstlisting}
 (defproblem problem4 storegroceries
 	;;Case4
@@ -967,7 +967,7 @@ The plan is generated in 72 steps and consists of 21 primitive tasks: \\
 		(table t1)
 		(robot r1)
 		(tray tray1)
-		
+
 		(unknown-location t1)(unknown-location c1)(unlabeled c1)
 		(holds-snack s1)
 		(holds-drink s2)
@@ -983,12 +983,12 @@ The plan is generated in 72 steps and consists of 21 primitive tasks: \\
 	((move-unlabeled-object-unknown-cupboard t1 c1 s1 tray1 camera1))
 )
 	\end{lstlisting}
-	
+
 	\vspace{5mm}
-	
-	
+
+
 	The error message shows that the planner gets stuck in a backtracking process. \\
-	
+
 	\begin{lstlisting}
 Exception in thread "AWT-EventQueue-0" java.lang.ArrayIndexOutOfBoundsException: -1
 at java.util.ArrayList.elementData(ArrayList.java:422)
@@ -998,7 +998,7 @@ at JSHOP2.JSHOP2GUI.runOneStep(JSHOP2GUI.java:512)
 at JSHOP2.JSHOP2GUI.access$100(JSHOP2GUI.java:16)
 ...
 	\end{lstlisting}
-	
+
 
 
 \subsection{A shelf does not hold an object in the initial state.}
@@ -1012,7 +1012,7 @@ In problem 4, the robot labels the shelfs based on the initial object that each 
 		branch1
 		(forall (?z) ((shelf ?z))(labeled ?z))
 		nil
-		
+
 		branch2
 		((shelf ?z)(not (labeled ?z)))
 		((!label-shelf ?z)(explore-cupboard ?c))
@@ -1041,7 +1041,7 @@ The problem definition for this case is as follows: \\
 		(table t1)
 		(robot r1)
 		(tray tray1)
-		
+
 		(unknown-location t1)(unknown-location c1)(unlabeled c1)
 		;;(holds-snack s1) <- Shelf 1 does not hold an object
 		(holds-drink s2)
@@ -1080,16 +1080,16 @@ Figure \ref{fig:failure-2} shows that the planner fails after 60 steps.
 
 \subsection{The problem definition is compiled using java -ra}
 
-The problem descriptions can be compiled into java bytecode using the commands documented in \cite{Ilghami2006}, like for example: 
+The problem descriptions can be compiled into java bytecode using the commands documented in \cite{Ilghami2006}, like for example:
 
  \begin{itemize}
  	\item java JSHOP2.InternalDomain -r InputFileName
  	\item java JSHOP2.InternalDomain -rSomeInteger InputFileName
  	\item java JSHOP2.InternalDomain -ra InputFileName
  \end{itemize}
- 
+
  If the option -r is used, the planner returns the first plan that it finds, in combination with a (-ra) all possible plans are returned. With -rSomeInteger the number of plans which are to be explored can be defined. \\
- 
+
  Initially, we compiled our problem definitions using the -ra command, as it is shown in many of the jshop2 examples, but since we have an exponential growth in memory consumption, including more than 4 objects in the problem definition leads to OutOfMemoryError on our machines. \\
 
 
@@ -1107,7 +1107,7 @@ at JSHOP2.Precondition.reset(Precondition.java:126)
 
 \vspace{5mm}
 
-We changed te compiling option to -r and were able to get plans for $n$ objects ($n= 1, 2, 3, 4, 5$) as shown in Table \ref{table:n-objects}. We have tested our solution for problem 4 with up to 20 objects. The resulting plan has 358 steps and its is accomplished using 109 primitive tasks: \\
+We changed the compile option to -r and were able to get plans for $n$ objects (where $n= 1, 2, 3, 4, 5$) as shown in Table \ref{table:n-objects}. We have tested our solution for problem 4 with up to 20 objects. The resulting plan has 358 steps and its is accomplished using 109 primitive tasks: \\
 
 \begin{lstlisting}
 
@@ -1225,10 +1225,10 @@ We changed te compiling option to -r and were able to get plans for $n$ objects 
 
 \vspace{5mm}
 
-The domain for solving problems 1 to 4 works under the assumptions described in section \ref{sec:assumptions}. If one of these assumptions is not met, the planner will fail. Modifications can be made to increase the flexibility of the domain. For instance, if the robot is not at the table, include a task for localizing and moving the robot to the table. If the shelf does not contain an object, assign one label to it based on the object categories. 
+The domain for solving problems 1 to 4 works under the assumptions described in section \ref{sec:assumptions}. If one of these assumptions is not met, the planner will fail. Modifications can be made to increase the flexibility of the domain. For instance, if the robot is not at the table, it is possible to include a task for localizing and moving the robot to the table. If the shelf does not contain an object, one could assign a label to it based on the object categories.
 
 	\bibliography{bibliography}{}
 	\bibliographystyle{plain}
-	
-	
+
+
 \end{document}
