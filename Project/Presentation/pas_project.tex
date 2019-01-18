@@ -15,14 +15,6 @@
 \usepackage{caption}
 \usepackage{framed}
 
-\usepackage{hyperref}
-\usepackage{cite}
-%\usepackage{listings}
-\usepackage{booktabs} % Required for better horizontal rules in tables
-\usepackage{multirow}
-\usepackage{multicol}
-\usepackage{graphicx}
-
 %\usepackage[
 %backend=bibtex,
 %style=nature   ,
@@ -121,25 +113,27 @@
 \end{frame}
 
 
-\begin{frame}{Problem Definition}
-  \begin{lstlisting}
-  (defproblem problem1 storegroceries
-    ;;Problem 1
-    (
-      (object a1)
-      (cupboard c1)
-      (door d1)
-      (shelf s1)
-      (table t1)
-      (robot r1)
-      (on a1 t1) (door-closed d1)(robot-at r1 t1)
-    )
-    ((move-known-object a1 t1 c1 s1))
-  )
-  \end{lstlisting}
-\end{frame}
+% TODO get lstlisting to work
+%\begin{frame}{Problem Definition}
+%  \begin{lstlisting}
+%  (defproblem problem1 storegroceries
+%    ;;Problem 1
+%    (
+%      (object a1)
+%      (cupboard c1)
+%      (door d1)
+%      (shelf s1)
+%      (table t1)
+%      (robot r1)
+%      (on a1 t1) (door-closed d1)(robot-at r1 t1)
+%    )
+%    ((move-known-object a1 t1 c1 s1))
+%  )
+%  \end{lstlisting}
+%\end{frame}
 
 
+% TODO get lstlisting to work
 %\begin{frame}{Obtaining Results}
 %  \begin{itemize}
 %    \item Planning can by obtained simply by running: \verb|make problem1| \\
