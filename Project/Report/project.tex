@@ -6,6 +6,8 @@
 \usepackage{multirow}
 \usepackage{multicol}
 \usepackage{graphicx}
+\usepackage{enumitem}
+\setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
 
 \lstset{
 	sensitive=false,    % not case-sensitive
@@ -93,7 +95,7 @@
 
 	\subsubsection*{Assumptions:} \label{sec:assumptions}
 
-	The following assumptions were made when writing the domain:
+	The following assumptions were made when writing the domain:\\
 
 	\begin{itemize}
 		\item The initial position of the robot is at the table.
@@ -104,7 +106,7 @@
 		\item The robot has a camera (problem 3 and 4).
 		\item All items should have information that can be used by the robot to classify them (problem 4).
 		\item Each shelf initially holds one object (problem 4).
-		\item There is one shelf per object category.
+		\item There is one shelf per object category. \\
 	\end{itemize}
 
 	If the initial state does not follow the assumptions, the planner will fail because the domain does not include operators and/or methods to handle those situations. Section \ref{sec:limitations} discusses some of the limitations of our domain and recommendations on how to adapt it to handle more complex scenarios.
@@ -414,7 +416,7 @@
 
 	\begin{itemize}
 		\item The table and the cupboard have to be located.
-        \item The are $n$ (where $n$ is between 2 to 5 inclusively) known and located objects on the table.
+        \item There are $n$ (where $n$ is between 2 to 5 inclusively) known and located objects on the table.
 		\item The door of the cupboard is closed.
 		\item Place the objects on any shelf.
 	\end{itemize}
@@ -532,7 +534,7 @@
 
 		\begin{itemize}
 			\item The table and the cupboard have to be located.
-			\item There are $n$ (where $n$ is between 2 to 5 inclusively) unknown objects on the table (perception has to be used)
+			\item There are $n$ (where $n$ is between 2 to 5 inclusively) unknown objects on the table (perception has to be used).
 			\item The door of the cupboard is closed.
 			\item Place the objects on any shelf.
 		\end{itemize}
@@ -660,10 +662,10 @@ The plan is generated in 72 steps and consists of 21 primitive tasks: \\
 
 		\begin{itemize}
 			\item The table and the cupboard have to be located.
-			\item The cupboard has to be explored. Each shelf holds object of a category.
+			\item The cupboard has to be explored. Each shelf holds object(s) of one category.
 			\item There are $n$ (where $n$ is between 2 to 5 inclusively) unknown objects on the table (perception has to be used). Each object belongs to a certain category.
 			\item The door of the cupboard is closed.
-			\item Place each order on the correct shelf according to the category.
+			\item Place each object on the correct shelf according to the category.
 		\end{itemize}
 
 	\subsubsection*{Planning problem}
@@ -1006,7 +1008,6 @@ at JSHOP2.JSHOP2GUI.access$100(JSHOP2GUI.java:16)
 In problem 4, the robot labels the shelfs based on the initial object that each shelf holds. If a shelf is empty, the robot will not be able to label it and the planner will get stuck in a recursive method. This problem is similar to the one discussed in the previous section. The method $explore-cupboard$ is called recursively until all shelfs are labeled. If the program does not have enough information for labeling all shelfs, the planner will fail. \\
 
 \begin{lstlisting}
-
 ;; To explore the shelves of the cupboard ?c
 	(:method (explore-cupboard ?c)
 		branch1
@@ -1110,7 +1111,6 @@ at JSHOP2.Precondition.reset(Precondition.java:126)
 We changed the compile option to -r and were able to get plans for $n$ objects (where $n= 1, 2, 3, 4, 5$) as shown in Table \ref{table:n-objects}. We have tested our solution for problem 4 with up to 20 objects. The resulting plan has 358 steps and its is accomplished using 109 primitive tasks: \\
 
 \begin{lstlisting}
-
 [ 1 ]    (!locate t1)
 [ 2 ]    (!locate c1)
 [ 3 ]    (!move r1 t1 c1)
